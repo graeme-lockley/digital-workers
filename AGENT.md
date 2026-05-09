@@ -50,6 +50,7 @@ docs/kanban/
 ```text
 .github/skills/
   create-epic/
+  plan-epic/
   create-story/
   plan-story/
   build-story/

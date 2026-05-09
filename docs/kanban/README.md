@@ -32,9 +32,10 @@ Example: `E03-runtime-router.md`.
 
 ## Required Flow
 
-1. Story `unplanned` -> `planned` via `plan-story`
-2. Story `planned` -> `doing` -> `done` via `build-story` and `finish-story`
-3. Epic `unplanned` -> `planned` -> `doing` -> `done` as delivery progresses
+1. Epic decomposition in `epics/unplanned` via `plan-epic` (creates ordered unplanned stories)
+2. Story `unplanned` -> `planned` via `plan-story`
+3. Story `planned` -> `doing` -> `done` via `build-story` and `finish-story`
+4. Epic `unplanned` -> `planned` -> `doing` -> `done` as delivery progresses
 
 Do not skip `planned` for implementation work.
 
@@ -64,5 +65,5 @@ Do not skip `planned` for implementation work.
 
 Every story keeps the spec set current. The full discipline is defined in
 [docs/specs/implementation-strategy.md §7](../specs/implementation-strategy.md#7-spec-maintenance-discipline-required-of-every-story)
-and enforced by `plan-story`, `build-story`, `verify-story`, `finish-story`, `finish-epic`,
+and enforced by `plan-epic`, `plan-story`, `build-story`, `verify-story`, `finish-story`, `finish-epic`,
 and the validators `pnpm check:story`, `pnpm check:epic`, and `pnpm check:specs`.

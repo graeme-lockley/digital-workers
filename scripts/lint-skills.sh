@@ -76,7 +76,7 @@ for skill in "${skills[@]}"; do
   ok "$skill" "frontmatter and refs checked"
 done
 
-for asset in README.md _shared/conventions.md _shared/failure-protocol.md _templates/README.md _templates/epic.md _templates/story-unplanned.md _templates/story-planned-additions.md _templates/story-doing-additions.md; do
+for asset in README.md _shared/conventions.md _shared/failure-protocol.md _templates/README.md _templates/epic.md _templates/epic-stories-ordered.md _templates/story-unplanned.md _templates/story-planned-additions.md _templates/story-doing-additions.md; do
   if [[ -f "$SKILLS_DIR/$asset" ]]; then
     ok "shared" "$asset exists"
   else
