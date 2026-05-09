@@ -1,0 +1,26 @@
+{
+  "name": "simple-agent",
+  "version": "1.0.0",
+  "description": "A simple AI assistant built with pi-mono libraries and web browsing support",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "check:story": "bash scripts/check-story.sh",
+    "check:epic": "bash scripts/check-epic.sh",
+    "lint:skills": "bash scripts/lint-skills.sh",
+    "lint:commit-msg": "bash scripts/validate-commit-msg.sh",
+    "setup:hooks": "bash scripts/setup-git-hooks.sh",
+    "validate:kanban": "pnpm lint:skills",
+    "validate:kanban:all": "bash scripts/validate-kanban-all.sh"
+  },
+  "dependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "pi-web-fetch": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
