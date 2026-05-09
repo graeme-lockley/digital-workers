@@ -1,5 +1,5 @@
 {
-  "name": "simple-agent",
+  "name": "digital-workers",
   "version": "1.0.0",
   "description": "A simple AI assistant built with pi-mono libraries and web browsing support",
   "type": "module",

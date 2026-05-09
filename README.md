@@ -1,4 +1,4 @@
-# simple-agent
+# digital-workers
 
 Local-first agent runtime project in transition from a single-app prototype to the architecture defined in `docs/architecture.md`.
 
@@ -208,7 +208,7 @@ Edit `src/index.ts` to:
 ## Project structure
 
 ```
-simple-agent/
+digital-workers/
 ├── .github/
 │   └── skills/        # kanban workflow skills + templates
 ├── docs/

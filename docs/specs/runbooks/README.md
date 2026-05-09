@@ -1,6 +1,6 @@
 # Runbooks
 
-Operational procedures: how to develop, deploy, secure, and debug simple-agent.
+Operational procedures: how to develop, deploy, secure, and debug digital-workers.
 
 ## Index
 

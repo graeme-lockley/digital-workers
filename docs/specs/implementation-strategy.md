@@ -7,7 +7,7 @@
 
 ## Purpose
 
-The architecture document defines *what* simple-agent is. This document defines *how* and *in what order* it will be built. Architecture is the destination; this document is the route. Changing the route does not change the destination.
+The architecture document defines *what* digital-workers is. This document defines *how* and *in what order* it will be built. Architecture is the destination; this document is the route. Changing the route does not change the destination.
 
 This document covers the full implementation: epic sequence, release train, exit criteria per epic, the spec set required to build the solution, the testing and risk strategy, and the spec-maintenance discipline that every story must follow.
 
@@ -93,7 +93,7 @@ Each epic below is a delivery unit. Every epic lists: scope, primary specs touch
 
 ### E10 — TUI Application
 
-- **Scope:** `apps/simple-agent-tui` migrated from current starter (`src/index.ts`); calls SessionAPI and WorkerManagerAPI over local IPC; renders streamed events; supports session create/resume/fork/terminate; surfaces commands.
+- **Scope:** `apps/digital-workers-tui` migrated from current starter (`src/index.ts`); calls SessionAPI and WorkerManagerAPI over local IPC; renders streamed events; supports session create/resume/fork/terminate; surfaces commands.
 - **Specs:** [09-tui.md](./09-tui.md).
 - **Exit criteria:** End-to-end demo: start runtime, launch TUI, send message to a configured worker, observe streamed reply, abandon, reissue, exit cleanly.
 - **Releasable outcome:** First end-user surface; the system is usable locally.

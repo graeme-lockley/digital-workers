@@ -11,7 +11,7 @@ Define the terminal user interface and its IPC contract with the core runtime.
 
 ## Scope
 
-- `apps/simple-agent-tui` migrated from the current starter `src/index.ts`.
+- `apps/digital-workers-tui` migrated from the current starter `src/index.ts`.
 - Session lifecycle UI (create, resume, fork, terminate, status).
 - Streamed event rendering filtered by `correlationId`.
 - Worker roster and `/status` panel.

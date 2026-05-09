@@ -1,4 +1,4 @@
-# Agent Guide for simple-agent
+# Agent Guide for digital-workers
 
 This file documents the current agent workflow baseline for this repository.
 

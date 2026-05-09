@@ -1,4 +1,4 @@
-# Architecture: Simple-Agent Monorepo
+# Architecture: digital-workers Monorepo
 
 **Document status:** Draft / RFC v0.1  
 **Date:** 2026-05-09  
@@ -93,10 +93,10 @@ Simple-agent evolves from a single AI assistant tool into a platform for orchest
 ## 3. Monorepo Structure
 
 ```
-simple-agent/
+digital-workers/
 │
 ├── apps/
-│   ├── simple-agent-tui/
+│   ├── digital-workers-tui/
 │   │   ├── src/
 │   │   │   ├── index.ts              # TUI entrypoint (current starter code)
 │   │   │   ├── tui.ts                # Terminal UI logic
@@ -1636,7 +1636,7 @@ See [docs/specs/runbooks/security.md](specs/runbooks/security.md) for worker iso
 
 - [ ] Monorepo scaffolded with pnpm workspaces.
 - [ ] Core runtime API defined (packages/protocol).
-- [ ] TUI migrated to apps/simple-agent-tui.
+- [ ] TUI migrated to apps/digital-workers-tui.
 - [ ] Configuration loader working.
 - [ ] Worker manager launching workers.
 - [ ] Basic router delivery and worker-to-worker coordination routing.
