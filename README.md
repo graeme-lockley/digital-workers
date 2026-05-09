@@ -102,11 +102,28 @@ Installed skills:
 
 - `create-epic`
 - `create-story`
+- `plan-epic`
 - `plan-story`
 - `build-story`
 - `verify-story`
 - `finish-story`
 - `finish-epic`
+
+## Current kanban status
+
+Current decomposed epic:
+
+- `E01-monorepo-foundation` in `docs/kanban/epics/unplanned/`
+
+Current unplanned stories for E01 (ordered):
+
+- `S01-01-monorepo-scaffold-and-app-migration.md`
+- `S01-02-pnpm-workspace-and-package-boundaries.md`
+- `S01-03-root-toolchain-and-quality-conventions.md`
+- `S01-04-ci-validation-workflow-scaffolding.md`
+- `S01-05-release-dry-run-placeholder.md`
+
+These stories are intentionally unplanned; the next workflow step is `plan-story` starting with `S01-01`.
 
 ## Validation commands
 
