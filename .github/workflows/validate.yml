@@ -1,0 +1,19 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate-repo:
+    name: Validate Repository Content
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run all repository validators
+        run: bash scripts/validate-kanban-all.sh
