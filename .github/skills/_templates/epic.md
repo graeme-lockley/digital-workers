@@ -10,7 +10,7 @@
 
 ## Stories (ordered - implement sequentially)
 
-1. [S##-##-<slug>.md](../../stories/unplanned/S##-##-<slug>.md)
+1. S##-## - <planned story title> (optional placeholder)
 
 ## Epic Completion Criteria
 

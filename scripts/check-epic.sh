@@ -60,31 +60,39 @@ if ! grep -qE '^## Epic Completion Criteria' "$FILE"; then
   errors=$((errors + 1))
 fi
 
-mapfile -t story_links < <(grep -oE '\(\.\./\.\./stories/(unplanned|planned|doing|done)/S[0-9]+-[0-9]+-[^)]+\.md\)' "$FILE" \
+declare -a story_links=()
+story_link_count=0
+while IFS= read -r rel; do
+  [[ -z "$rel" ]] && continue
+  story_links+=("$rel")
+  story_link_count=$((story_link_count + 1))
+done < <(grep -oE '\(\.\./\.\./stories/(unplanned|planned|doing|done)/S[0-9]+-[0-9]+-[^)]+\.md\)' "$FILE" \
   | tr -d '()' || true)
 
-if [[ ${#story_links[@]} -eq 0 ]]; then
-  echo "ERROR: no story links found in epic" >&2
+if [[ "$PHASE" == "done" && "$story_link_count" -eq 0 ]]; then
+  echo "ERROR: done epic must include at least one linked story" >&2
   errors=$((errors + 1))
 fi
 
-for rel in "${story_links[@]}"; do
-  target="$(cd "$(dirname "$FILE")" && cd "$(dirname "$rel")" 2>/dev/null && pwd)/$(basename "$rel")"
-  if [[ ! -f "$target" ]]; then
-    echo "ERROR: linked story missing: ${rel}" >&2
-    errors=$((errors + 1))
-    continue
-  fi
-  if [[ "$PHASE" == "done" ]]; then
-    case "$target" in
-      *"/docs/kanban/stories/done/"*) ;;
-      *)
-        echo "ERROR: done epic links to non-done story: ${target#$REPO_ROOT/}" >&2
-        errors=$((errors + 1))
-        ;;
-    esac
-  fi
-done
+if [[ "$story_link_count" -gt 0 ]]; then
+  for rel in "${story_links[@]}"; do
+    target="$(cd "$(dirname "$FILE")" && cd "$(dirname "$rel")" 2>/dev/null && pwd)/$(basename "$rel")"
+    if [[ ! -f "$target" ]]; then
+      echo "ERROR: linked story missing: ${rel}" >&2
+      errors=$((errors + 1))
+      continue
+    fi
+    if [[ "$PHASE" == "done" ]]; then
+      case "$target" in
+        *"/docs/kanban/stories/done/"*) ;;
+        *)
+          echo "ERROR: done epic links to non-done story: ${target#$REPO_ROOT/}" >&2
+          errors=$((errors + 1))
+          ;;
+      esac
+    fi
+  done
+fi
 
 if [[ "$PHASE" == "done" ]]; then
   unchecked_epic_criteria="$(awk '
@@ -99,21 +107,23 @@ if [[ "$PHASE" == "done" ]]; then
   fi
 
   # Specs every done story claims to have updated must exist.
-  for rel in "${story_links[@]}"; do
-    target="$(cd "$(dirname "$FILE")" && cd "$(dirname "$rel")" 2>/dev/null && pwd)/$(basename "$rel")"
-    [[ -f "$target" ]] || continue
-    while IFS= read -r spec_path; do
-      [[ -z "$spec_path" ]] && continue
-      if [[ ! -f "$REPO_ROOT/$spec_path" ]]; then
-        echo "ERROR: spec referenced by ${target#$REPO_ROOT/} is missing on disk: $spec_path" >&2
-        errors=$((errors + 1))
-      fi
-    done < <(awk '
-      /^## / { if (in_specs) exit }
-      /^## Spec Updates([: ]|$)/ { in_specs=1; next }
-      in_specs { print }
-    ' "$target" | grep -oE 'docs/specs/[A-Za-z0-9_./-]+\.md' | sort -u)
-  done
+  if [[ "$story_link_count" -gt 0 ]]; then
+    for rel in "${story_links[@]}"; do
+      target="$(cd "$(dirname "$FILE")" && cd "$(dirname "$rel")" 2>/dev/null && pwd)/$(basename "$rel")"
+      [[ -f "$target" ]] || continue
+      while IFS= read -r spec_path; do
+        [[ -z "$spec_path" ]] && continue
+        if [[ ! -f "$REPO_ROOT/$spec_path" ]]; then
+          echo "ERROR: spec referenced by ${target#$REPO_ROOT/} is missing on disk: $spec_path" >&2
+          errors=$((errors + 1))
+        fi
+      done < <(awk '
+        /^## / { if (in_specs) exit }
+        /^## Spec Updates([: ]|$)/ { in_specs=1; next }
+        in_specs { print }
+      ' "$target" | grep -oE 'docs/specs/[A-Za-z0-9_./-]+\.md' | sort -u)
+    done
+  fi
 fi
 
 if [[ "$errors" -gt 0 ]]; then

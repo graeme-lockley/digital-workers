@@ -34,10 +34,13 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 3. Create file: `docs/kanban/epics/unplanned/E##-<slug>.md`.
 4. Populate from template: [../_templates/epic.md](../_templates/epic.md).
 5. Fill required sections with concrete project context.
-6. Add at least one placeholder story entry using `S##-##` id pattern.
+6. Optionally add planned story placeholders using `S##-##` id pattern.
+
+  Note: Do not create story files during epic creation.
 
 ## Quality gate
 
 - File exists under `epics/unplanned/`.
 - Title and id match filename.
 - `Epic Completion Criteria` section exists with unchecked boxes.
+- No linked story files are required for `unplanned` epics.

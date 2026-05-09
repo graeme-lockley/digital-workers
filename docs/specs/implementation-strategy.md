@@ -30,10 +30,10 @@ Each epic below is a delivery unit. Every epic lists: scope, primary specs touch
 
 ### E01 — Monorepo Foundation
 
-- **Scope:** pnpm workspaces, Turbo orchestration, root `tsconfig`, ESLint, Prettier, conventional-commit hook (already present), CI workflow scaffolding under `.github/workflow/`.
+- **Scope:** pnpm workspaces, Turbo orchestration, root `tsconfig`, ESLint, Prettier, conventional-commit hook (already present), CI workflow scaffolding under `.github/workflows/`, and migration of the current codebase into the architecture-defined monorepo layout (`apps/`, `packages/`, `infra/`, `workspaces/`) with starter code moved to its target app path.
 - **Specs:** [00-overview.md](./00-overview.md), [12-packaging-release.md](./12-packaging-release.md).
-- **Exit criteria:** `pnpm install && pnpm typecheck && pnpm lint && pnpm test` succeed on an empty graph; CI runs on PR; release pipeline placeholder runs in dry-run.
-- **Releasable outcome:** Reproducible build/test environment.
+- **Exit criteria:** Architecture-aligned folder structure exists in-repo with current starter code migrated to target location, `pnpm install && pnpm typecheck && pnpm lint && pnpm test` succeed on the migrated baseline, CI runs on PR, and release pipeline placeholder runs in dry-run.
+- **Releasable outcome:** Reproducible build/test environment on an architecture-conformant repository layout.
 
 ### E02 — Protocol Package
 
