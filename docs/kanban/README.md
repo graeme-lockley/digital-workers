@@ -52,6 +52,17 @@ Do not skip `planned` for implementation work.
   - tasks checked
   - tests added/updated or explicit rationale
   - `Build notes` with dated summary
+  - `## Documentation and specs to update` carried forward from planning
+  - `## Spec Updates` listing every `docs/specs/*` file changed (or `_No spec impact_` with rationale)
 - An epic in `epics/done/` must have:
   - all linked story files in `docs/kanban/stories/done/`
   - `Epic Completion Criteria` all checked
+  - every spec referenced by its stories present on disk
+  - `docs/specs/README.md` and the Spec Ownership Matrix in [`docs/specs/implementation-strategy.md`](../specs/implementation-strategy.md#6-spec-ownership-matrix) up to date
+
+## Spec maintenance
+
+Every story keeps the spec set current. The full discipline is defined in
+[docs/specs/implementation-strategy.md §7](../specs/implementation-strategy.md#7-spec-maintenance-discipline-required-of-every-story)
+and enforced by `plan-story`, `build-story`, `verify-story`, `finish-story`, `finish-epic`,
+and the validators `pnpm check:story`, `pnpm check:epic`, and `pnpm check:specs`.

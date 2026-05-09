@@ -8,6 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "check:story": "bash scripts/check-story.sh",
     "check:epic": "bash scripts/check-epic.sh",
+    "check:specs": "bash scripts/check-specs.sh",
     "lint:skills": "bash scripts/lint-skills.sh",
     "lint:commit-msg": "bash scripts/validate-commit-msg.sh",
     "setup:hooks": "bash scripts/setup-git-hooks.sh",

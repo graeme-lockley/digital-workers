@@ -32,6 +32,11 @@ if ! bash "$REPO_ROOT/scripts/lint-skills.sh"; then
   errors=$((errors + 1))
 fi
 
+echo "==> Check specs"
+if ! bash "$REPO_ROOT/scripts/check-specs.sh"; then
+  errors=$((errors + 1))
+fi
+
 echo "==> Validate stories"
 for phase in unplanned planned doing done; do
   while IFS= read -r file; do

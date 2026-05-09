@@ -32,12 +32,16 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 2. If source is `stories/planned/`, move to `docs/kanban/stories/doing/`.
 3. Ensure `## Build notes` exists; append entry using `YYYY-MM-DD` date format.
 4. Implement code and documentation changes needed by acceptance criteria.
-5. Tick completed `Tasks` checkboxes in the story.
-6. Run project checks relevant to changed areas (`test`, `typecheck`, `lint` as available).
-7. If acceptance criteria are fully met, leave story in `doing/` and hand off to `verify-story` + `finish-story`.
+5. **Update every `docs/specs/*` file listed in `## Documentation and specs to update`** in the same change set as the code. If a new spec is required, create it and add it to [docs/specs/README.md](../../../docs/specs/README.md) and to the Spec Ownership Matrix in [docs/specs/implementation-strategy.md §6](../../../docs/specs/implementation-strategy.md#6-spec-ownership-matrix).
+6. Append a `## Spec Updates` section to the story (or update it) listing each `docs/specs/*` file changed with a one-line description. If `_No spec impact_` was recorded in planning, restate that here with the same rationale.
+7. Tick completed `Tasks` checkboxes in the story.
+8. Run project checks relevant to changed areas (`test`, `typecheck`, `lint` as available).
+9. If acceptance criteria are fully met, leave story in `doing/` and hand off to `verify-story` + `finish-story`.
 
 ## Quality gate
 
 - Story is in `stories/doing/` while implementation is active.
 - Build notes include at least one dated entry.
 - Tasks reflect actual progress.
+- Every spec promised in `## Documentation and specs to update` is updated, or `## Spec Updates` records `_No spec impact_` with the planning-time rationale.
+- The spec index ([docs/specs/README.md](../../../docs/specs/README.md)) lists every spec the story added.

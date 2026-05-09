@@ -20,11 +20,13 @@ Not yet implemented:
 
 ## Source of Truth
 
-- Architecture: `docs/architecture.md`
+- Architecture (intent): `docs/architecture.md`
+- Implementation strategy and spec ownership: `docs/specs/implementation-strategy.md`
+- Spec set (buildable design): `docs/specs/`
 - Kanban policy and folder conventions: `docs/kanban/README.md`
 - Skills catalog: `.github/skills/README.md`
 
-When there is any mismatch, prefer `docs/architecture.md`.
+When there is any mismatch, prefer `docs/architecture.md`. Specs derive from it; the implementation strategy sequences delivery.
 
 ## Kanban Structure (Canonical)
 
@@ -65,11 +67,13 @@ These skills are designed to move story and epic files through kanban phases.
 - `scripts/check-story.sh`
   - Validates a single story file by ID or filename.
 - `scripts/check-epic.sh`
-  - Validates a single epic file by ID or filename.
+  - Validates a single epic file by ID or filename, including spec references in done epics.
+- `scripts/check-specs.sh`
+  - Confirms every `docs/specs/NN-*.md` is listed in the spec index and the Spec Ownership Matrix.
 - `scripts/lint-skills.sh`
   - Lints skill frontmatter and references.
 - `scripts/validate-kanban-all.sh`
-  - Runs skill lint + all story checks + all epic checks.
+  - Runs skill lint + spec check + all story checks + all epic checks.
 
 ## PNPM Commands
 
@@ -78,6 +82,7 @@ These skills are designed to move story and epic files through kanban phases.
 - `pnpm setup:hooks`
 - `pnpm check:story -- S##-##`
 - `pnpm check:epic -- E##`
+- `pnpm check:specs`
 - `pnpm validate:kanban`
 - `pnpm validate:kanban:all`
 
@@ -102,8 +107,9 @@ After `git init`, run `pnpm setup:hooks` to enforce commit message validation lo
 
 1. Use skills for kanban transitions.
 2. Keep story and epic templates consistent with `.github/skills/_templates/`.
-3. Run `pnpm validate:kanban:all` before merging or releasing documentation/process changes.
-4. Keep architecture and kanban docs aligned when structure changes.
+3. Every story keeps the `docs/specs/` set current — see [docs/specs/implementation-strategy.md §7](docs/specs/implementation-strategy.md#7-spec-maintenance-discipline-required-of-every-story).
+4. Run `pnpm validate:kanban:all` before merging or releasing documentation/process changes.
+5. Keep architecture, specs, and kanban docs aligned when structure changes.
 
 ## Editing Rules for Agents
 

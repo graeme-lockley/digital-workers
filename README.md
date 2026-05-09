@@ -120,9 +120,22 @@ pnpm check:story -- S01-01
 # Validate one epic
 pnpm check:epic -- E01
 
-# Validate all kanban artifacts (skills + all stories + all epics)
+# Validate the docs/specs/ set (index + ownership matrix coverage)
+pnpm check:specs
+
+# Validate all kanban artifacts (skills + specs + all stories + all epics)
 pnpm validate:kanban:all
 ```
+
+## Specs and implementation strategy
+
+The architecture (`docs/architecture.md`) describes the destination. The route is owned by
+[`docs/specs/implementation-strategy.md`](docs/specs/implementation-strategy.md), which sequences
+the twelve releasable epics. The buildable design of each facet lives under
+[`docs/specs/`](docs/specs/) and is indexed by [`docs/specs/README.md`](docs/specs/README.md).
+
+Every story keeps its specs current; the discipline is enforced by the workflow skills and the
+validators above.
 
 ## Commit message policy
 

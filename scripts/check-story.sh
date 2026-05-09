@@ -96,10 +96,26 @@ case "$PHASE" in
       echo "ERROR: doing story missing '## Build notes'" >&2
       errors=$((errors + 1))
     fi
+    if ! has_h2 "Documentation and specs to update"; then
+      echo "ERROR: doing story missing '## Documentation and specs to update' (carry forward from planned)" >&2
+      errors=$((errors + 1))
+    fi
+    if ! has_h2 "Spec Updates"; then
+      echo "ERROR: doing story missing '## Spec Updates' (record spec changes as you build)" >&2
+      errors=$((errors + 1))
+    fi
     ;;
   done)
     if ! has_h2 "Build notes"; then
       echo "ERROR: done story missing '## Build notes'" >&2
+      errors=$((errors + 1))
+    fi
+    if ! has_h2 "Documentation and specs to update"; then
+      echo "ERROR: done story missing '## Documentation and specs to update'" >&2
+      errors=$((errors + 1))
+    fi
+    if ! has_h2 "Spec Updates"; then
+      echo "ERROR: done story missing '## Spec Updates'" >&2
       errors=$((errors + 1))
     fi
     unchecked="$(count_unchecked_tasks)"

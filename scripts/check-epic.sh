@@ -97,6 +97,23 @@ if [[ "$PHASE" == "done" ]]; then
     echo "ERROR: done epic has unchecked completion criteria (${unchecked_epic_criteria})" >&2
     errors=$((errors + 1))
   fi
+
+  # Specs every done story claims to have updated must exist.
+  for rel in "${story_links[@]}"; do
+    target="$(cd "$(dirname "$FILE")" && cd "$(dirname "$rel")" 2>/dev/null && pwd)/$(basename "$rel")"
+    [[ -f "$target" ]] || continue
+    while IFS= read -r spec_path; do
+      [[ -z "$spec_path" ]] && continue
+      if [[ ! -f "$REPO_ROOT/$spec_path" ]]; then
+        echo "ERROR: spec referenced by ${target#$REPO_ROOT/} is missing on disk: $spec_path" >&2
+        errors=$((errors + 1))
+      fi
+    done < <(awk '
+      /^## / { if (in_specs) exit }
+      /^## Spec Updates([: ]|$)/ { in_specs=1; next }
+      in_specs { print }
+    ' "$target" | grep -oE 'docs/specs/[A-Za-z0-9_./-]+\.md' | sort -u)
+  done
 fi
 
 if [[ "$errors" -gt 0 ]]; then

@@ -32,11 +32,16 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
    - `Impact analysis`
    - `Tasks` with actionable checkbox items
    - `Tests to add`
-   - `Documentation and specs to update`
+   - `Documentation and specs to update` — enumerate every `docs/specs/*` file the story will change (one bullet per spec). If no spec is impacted, write `_No spec impact_` followed by a one-line justification.
 5. Move file to `docs/kanban/stories/planned/` with same filename.
 
 ## Quality gate
 
 - No unchecked placeholder text remains.
 - At least one task checkbox exists.
+- `Documentation and specs to update` either lists at least one `docs/specs/*` file or contains `_No spec impact_` with rationale.
 - Story exists only in `stories/planned/` (not `stories/unplanned/`).
+
+## Spec-maintenance contract
+
+This skill is the entry point for the spec-maintenance discipline defined in [docs/specs/implementation-strategy.md §7](../../../docs/specs/implementation-strategy.md#7-spec-maintenance-discipline-required-of-every-story). The specs listed here are the contract that `build-story`, `verify-story`, and `finish-story` will enforce.
