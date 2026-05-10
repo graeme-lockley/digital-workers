@@ -1,2 +1,8 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+  - 'infra'
+  - 'workspaces/*'
+
 patchedDependencies:
   pi-web-fetch@1.1.0: patches/pi-web-fetch@1.1.0.patch

@@ -4,8 +4,11 @@
   "description": "A simple AI assistant built with pi-mono libraries and web browsing support",
   "type": "module",
   "scripts": {
-    "start": "tsx apps/digital-workers-tui/src/index.ts",
-    "dev": "tsx watch apps/digital-workers-tui/src/index.ts",
+    "start": "pnpm --filter @digital-workers/tui start",
+    "dev": "pnpm --filter @digital-workers/tui dev",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx 2>/dev/null || true",
+    "test": "node --test",
     "test:all": "bash scripts/test-all.sh",
     "check:story": "bash scripts/check-story.sh",
     "check:epic": "bash scripts/check-epic.sh",

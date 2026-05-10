@@ -14,6 +14,9 @@ Define how the monorepo is built, tested, versioned, and released, and how infra
 - pnpm workspaces and Turbo task graph.
 - Root `tsconfig`, ESLint, Prettier configuration.
 - Root scripts and TypeScript include roots that target app entrypoints under `apps/` (initially `apps/digital-workers-tui/src/index.ts`).
+- **Workspace package boundaries:** pnpm-workspace.yaml declares workspace membership via globs: `apps/*`, `packages/*`, `infra`, and `workspaces/*`. Each workspace member must have a `package.json` with a scoped name (e.g., `@digital-workers/tui` for the TUI app).
+- **Dependency resolution:** All workspace members resolve dependencies through the root lockfile (`pnpm-lock.yaml`); shared dependencies are hoisted to `.pnpm/` by default.
+- **Workspace-aware scripts:** Root `package.json` uses pnpm filters (e.g., `pnpm --filter @digital-workers/tui`) to orchestrate per-package commands; utility scripts like `pnpm -w typecheck` run in workspace mode for cross-package runs.
 - CI workflows under `.github/workflow/`: `ci.yml`, `test.yml`, `release.yml`.
 - Conventional Commits enforcement (already implemented via `.githooks/commit-msg`).
 - Versioning strategy (per-package semver; coordinated release for runtime + protocol).
@@ -38,5 +41,6 @@ Define how the monorepo is built, tested, versioned, and released, and how infra
 
 ## Change log
 
+- 2026-05-10: Documented pnpm workspace package boundaries, dependency resolution strategy, and workspace-aware script patterns (S01-02).
 - 2026-05-10: Added entrypoint path and top-level scaffold requirements for the S01-01 migration.
 - 2026-05-09: Initial stub.

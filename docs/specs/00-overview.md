@@ -15,6 +15,7 @@ Orient contributors to the spec set, the conventions all specs share, and how sp
 - Cross-cutting conventions (status, ownership, change log).
 - The contract between specs and stories.
 - Baseline monorepo layout conventions for the first foundation epic (`apps/`, `packages/`, `infra/`, `workspaces/`) and the initial app entrypoint location under `apps/digital-workers-tui/src/`.
+- **pnpm workspaces structure:** Repository uses pnpm workspaces configured via `pnpm-workspace.yaml` to define package boundaries across `apps/*`, `packages/*`, `infra/`, and `workspaces/*` globs. Each workspace member has its own `package.json` with scoped package names (e.g., `@digital-workers/tui`).
 
 ## Design
 
@@ -34,5 +35,6 @@ Orient contributors to the spec set, the conventions all specs share, and how sp
 
 ## Change log
 
+- 2026-05-10: Documented pnpm workspaces structure and workspace package scoping (S01-02).
 - 2026-05-10: Documented baseline monorepo layout and initial app path under `apps/digital-workers-tui/src/`.
 - 2026-05-09: Initial stub.
