@@ -28,6 +28,7 @@ Define the testing strategy that governs every story.
 - Turbo orchestrates `pnpm test` across workspace packages, but each package remains responsible for its own `test` script and local test discovery.
 - The foundation CI workflow mirrors the local repository validation path by running `pnpm install --frozen-lockfile`, then `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm validate:kanban:all` on pull requests and pushes to `main`.
 - Changes to shared tooling, root scripts, or workflow definitions must validate the same command order locally before they are considered ready for review.
+- The release workflow scaffold is validated locally by `pnpm check:release-workflow`, which asserts the workflow is triggerable via `workflow_dispatch`, includes the repository validation stages, and contains no publish commands.
 - `pnpm format` remains available as a root quality command, but it is not part of the required green baseline for foundation CI until the repository's inherited formatting drift is cleaned up.
 
 ## Interfaces
@@ -45,5 +46,6 @@ Define the testing strategy that governs every story.
 ## Change log
 
 - 2026-05-10: Clarified that the CI-required local reproduction path is the current green baseline and that `pnpm format` remains non-gating until repository formatting drift is resolved (S01-04).
+- 2026-05-10: Added the local release-workflow validation check for the dry-run release scaffold (S01-05).
 - 2026-05-10: Added the canonical root validation workflow (`pnpm typecheck && pnpm lint && pnpm test`) and clarified Turbo's role in package test orchestration (S01-03).
 - 2026-05-09: Initial stub.

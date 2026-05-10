@@ -1,0 +1,55 @@
+name: Release Dry Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_note:
+        description: Optional note for the dry-run release simulation
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  release-dry-run:
+    name: Dry Run Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run typecheck
+        run: pnpm typecheck
+
+      - name: Run lint
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Run all repository validators
+        run: pnpm validate:kanban:all
+
+      - name: Simulate release
+        run: |
+          echo "Dry-run release pipeline complete."
+          echo "Input note: ${{ inputs.release_note }}"
+          echo "No publish, deploy, or tag commands were executed."
+          echo "Release automation remains a placeholder for future stories."

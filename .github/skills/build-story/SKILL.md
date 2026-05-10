@@ -37,6 +37,7 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 7. Tick completed `Tasks` checkboxes in the story.
 8. Run project checks relevant to changed areas (`test`, `typecheck`, `lint` as available).
 9. If acceptance criteria are fully met, leave story in `doing/` and hand off to `verify-story` + `finish-story`.
+10. Open the linked epic (any phase under `docs/kanban/epics/`) and update the story entry in its `Stories` section to point at `../../stories/doing/<story>.md`.
 
 ## Quality gate
 
@@ -45,3 +46,4 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 - Tasks reflect actual progress.
 - Every spec promised in `## Documentation and specs to update` is updated, or `## Spec Updates` records `_No spec impact_` with the planning-time rationale.
 - The spec index ([docs/specs/README.md](../../../docs/specs/README.md)) lists every spec the story added.
+- Epic references the current doing path for the story.

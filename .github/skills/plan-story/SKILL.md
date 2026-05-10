@@ -34,6 +34,7 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
    - `Tests to add`
    - `Documentation and specs to update` — enumerate every `docs/specs/*` file the story will change (one bullet per spec). If no spec is impacted, write `_No spec impact_` followed by a one-line justification.
 5. Move file to `docs/kanban/stories/planned/` with same filename.
+6. Open the linked epic (any phase under `docs/kanban/epics/`) and update the story entry in its `Stories` section to point at `../../stories/planned/<story>.md`.
 
 ## Quality gate
 
@@ -41,6 +42,7 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 - At least one task checkbox exists.
 - `Documentation and specs to update` either lists at least one `docs/specs/*` file or contains `_No spec impact_` with rationale.
 - Story exists only in `stories/planned/` (not `stories/unplanned/`).
+- Epic references the new planned path for the story.
 
 ## Spec-maintenance contract
 
