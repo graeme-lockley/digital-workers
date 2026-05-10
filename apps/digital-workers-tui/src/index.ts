@@ -32,7 +32,7 @@ const noSession = args.includes("--no-session");
 
 function buildSessionManager(): SessionManager {
 	if (noSession) return SessionManager.inMemory(cwd);
-	if (continueSession) return SessionManager.continueRecent(cwd);
+	if (continueSession || resumeSession) return SessionManager.continueRecent(cwd);
 	return SessionManager.create(cwd);
 }
 

@@ -44,3 +44,28 @@ Local checks may be available after S01-03, but CI enforcement is incomplete and
 
 - Version drift between local and CI can hide failures; lock versions early.
 - Keep this story focused on validation scaffolding, not full release publication.
+
+## Impact analysis
+
+- The current `.github/workflows/validate.yml` file only runs repository validators, so the story expands it into a CI gate that also installs dependencies and runs the core quality commands.
+- The change should make CI the authoritative execution path for the same checks developers use locally, without introducing release publishing or deployment work.
+
+## Tasks
+
+- [ ] Update `.github/workflows/validate.yml` so the validation job runs on both push and pull request events with pinned Node.js and pnpm versions.
+- [ ] Replace or extend the current validator-only step with the repository install and root quality checks that CI must enforce.
+- [ ] Verify the workflow step naming and trigger behavior match the release/testing expectations documented in the specs.
+
+## Tests to add
+
+- [ ] Run the workflow command set locally in the same order as CI to confirm `pnpm install`, `pnpm typecheck`, `pnpm lint`, and `pnpm test` are valid on the baseline.
+- [ ] Confirm the repository validators still pass after the workflow change with `pnpm validate:kanban:all`.
+
+## Documentation and specs to update
+
+- [ ] [docs/specs/12-packaging-release.md](../../../specs/12-packaging-release.md) — document the CI workflow shape, pinned toolchain assumptions, and the validation commands the release pipeline depends on.
+- [ ] [docs/specs/13-testing.md](../../../specs/13-testing.md) — record CI as the source of truth for green builds and align the test strategy with the workflow-backed validation path.
+
+## Notes
+
+The repo already has a `validate.yml` scaffold, so implementation should adjust that workflow rather than invent a separate validation path.

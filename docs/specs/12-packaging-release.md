@@ -29,10 +29,16 @@ Define how the monorepo is built, tested, versioned, and released, and how infra
 - CI is the source of truth for "green"; local checks must mirror CI.
 - Release pipeline is dry-runnable from day one and only enabled per-package as that package stabilises.
 - Repository root keeps architecture-required top-level scaffolding directories (`apps/`, `packages/`, `infra/`, `workspaces/`) in version control from the first foundation story.
+- Root TypeScript configuration is split into `tsconfig.base.json` for shared compiler defaults and a root `tsconfig.json` for workspace-wide include roots; each workspace package or app extends the base config with local `rootDir` and `outDir` settings.
+- Root validation commands are canonical and must remain stable: `pnpm typecheck`, `pnpm lint`, `pnpm format`, and `pnpm test`.
+- Turbo orchestrates cross-workspace `typecheck`, `lint`, and `test` runs from the repository root, while package-local scripts remain the execution units Turbo invokes.
+- The root `package.json` must declare a `packageManager` field so workspace tooling resolves consistently in local development and CI.
 
 ## Interfaces
 
 - `pnpm-workspace.yaml`, `turbo.json`, `package.json` scripts.
+- `tsconfig.base.json`, root `tsconfig.json`, and per-workspace `tsconfig.json` files.
+- `eslint.config.js` and `.prettierrc.json` at repository root.
 - `package.json` start/dev entrypoint path: `apps/digital-workers-tui/src/index.ts`.
 
 ## Open questions
@@ -41,6 +47,7 @@ Define how the monorepo is built, tested, versioned, and released, and how infra
 
 ## Change log
 
+- 2026-05-10: Added the root TypeScript base strategy, canonical root validation commands, Turbo orchestration expectations, and the `packageManager` requirement (S01-03).
 - 2026-05-10: Documented pnpm workspace package boundaries, dependency resolution strategy, and workspace-aware script patterns (S01-02).
 - 2026-05-10: Added entrypoint path and top-level scaffold requirements for the S01-01 migration.
 - 2026-05-09: Initial stub.

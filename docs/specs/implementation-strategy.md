@@ -30,9 +30,9 @@ Each epic below is a delivery unit. Every epic lists: scope, primary specs touch
 
 ### E01 — Monorepo Foundation
 
-- **Scope:** pnpm workspaces, Turbo orchestration, root `tsconfig`, ESLint, Prettier, conventional-commit hook (already present), CI workflow scaffolding under `.github/workflows/`, and migration of the current codebase into the architecture-defined monorepo layout (`apps/`, `packages/`, `infra/`, `workspaces/`) with starter code moved from `src/index.ts` to `apps/digital-workers-tui/src/index.ts`. Workspace boundaries declared via `pnpm-workspace.yaml` with globs for `apps/*`, `packages/*`, `infra`, and `workspaces/*`.
+- **Scope:** pnpm workspaces, Turbo orchestration, root TypeScript baseline (`tsconfig.base.json` plus root/package configs), ESLint, Prettier, conventional-commit hook (already present), CI workflow scaffolding under `.github/workflows/`, and migration of the current codebase into the architecture-defined monorepo layout (`apps/`, `packages/`, `infra/`, `workspaces/`) with starter code moved from `src/index.ts` to `apps/digital-workers-tui/src/index.ts`. Workspace boundaries declared via `pnpm-workspace.yaml` with globs for `apps/*`, `packages/*`, `infra`, and `workspaces/*`.
 - **Specs:** [00-overview.md](./00-overview.md), [12-packaging-release.md](./12-packaging-release.md).
-- **Exit criteria:** Architecture-aligned folder structure exists in-repo with current starter code migrated to `apps/digital-workers-tui/src/index.ts`, pnpm workspaces configured via `pnpm-workspace.yaml` with all packages discoverable, `pnpm install && pnpm typecheck && pnpm lint && pnpm test` succeed on the migrated baseline, CI runs on PR, and release pipeline placeholder runs in dry-run.
+- **Exit criteria:** Architecture-aligned folder structure exists in-repo with current starter code migrated to `apps/digital-workers-tui/src/index.ts`, pnpm workspaces configured via `pnpm-workspace.yaml` with all packages discoverable, canonical root validation commands (`pnpm typecheck`, `pnpm lint`, `pnpm test`) are backed by Turbo-orchestrated workspace scripts, `pnpm install && pnpm typecheck && pnpm lint && pnpm test` succeed on the migrated baseline, CI runs on PR, and release pipeline placeholder runs in dry-run.
 - **Releasable outcome:** Reproducible build/test environment on an architecture-conformant repository layout with workspace-aware dependency management.
 
 ### E02 — Protocol Package
@@ -220,4 +220,5 @@ These items remain in `architecture.md` §17 as future extensibility and are int
 
 ## Change log
 
+- 2026-05-10: Added the E01 root toolchain baseline requirement for shared TypeScript config, ESLint, Prettier, and Turbo-backed canonical validation commands (S01-03).
 - 2026-05-10: Clarified E01 migration path from `src/index.ts` to `apps/digital-workers-tui/src/index.ts` and made the path explicit in E01 exit criteria.

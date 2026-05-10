@@ -67,3 +67,12 @@ Every story keeps the spec set current. The full discipline is defined in
 [docs/specs/implementation-strategy.md §7](../specs/implementation-strategy.md#7-spec-maintenance-discipline-required-of-every-story)
 and enforced by `plan-epic`, `plan-story`, `build-story`, `verify-story`, `finish-story`, `finish-epic`,
 and the validators `pnpm check:story`, `pnpm check:epic`, and `pnpm check:specs`.
+
+## Canonical Root Commands
+
+- `pnpm typecheck` runs the shared TypeScript validation workflow from repository root.
+- `pnpm lint` runs the shared lint workflow from repository root.
+- `pnpm format` checks repository formatting from repository root.
+- `pnpm test` runs the workspace test workflow from repository root.
+
+These command names are part of the repository contract for local development, stories, and CI.
