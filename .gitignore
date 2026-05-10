@@ -4,6 +4,3 @@ dist/
 *.log
 .env
 typescript
-infra/
-packages/
-workspaces/
