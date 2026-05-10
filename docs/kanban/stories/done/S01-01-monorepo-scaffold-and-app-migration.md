@@ -1,7 +1,9 @@
 # Monorepo Scaffold and App Migration
 
 ## Sequence: S01-01
+
 ## Tier: Foundation
+
 ## Former ID: (none)
 
 ## Epic

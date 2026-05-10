@@ -182,7 +182,7 @@ Example use cases:
    The wiki is a knowledge graph, not merely a folder full of files.
 
 10. **JSON output is mandatory for automation**  
-   Human-readable text output is useful, but every important command should support `--json`.
+    Human-readable text output is useful, but every important command should support `--json`.
 
 ---
 
@@ -517,16 +517,16 @@ updated: 2026-05-09
 
 Fields:
 
-| Field | Required | Description |
-|---|---:|---|
-| `id` | No, but recommended | Logical page ID. If absent, derive from path. |
-| `title` | No | Human title. If absent, derive from first H1 or page ID. |
-| `aliases` | No | Alternative IDs that resolve to this page. |
-| `tags` | No | List of classification tags. |
-| `status` | No | Draft, active, deprecated, archived, etc. |
-| `created` | No | Creation date. |
-| `updated` | No | Last update date. |
-| `redirect` | No | Page ID to redirect to. |
+| Field      |            Required | Description                                              |
+| ---------- | ------------------: | -------------------------------------------------------- |
+| `id`       | No, but recommended | Logical page ID. If absent, derive from path.            |
+| `title`    |                  No | Human title. If absent, derive from first H1 or page ID. |
+| `aliases`  |                  No | Alternative IDs that resolve to this page.               |
+| `tags`     |                  No | List of classification tags.                             |
+| `status`   |                  No | Draft, active, deprecated, archived, etc.                |
+| `created`  |                  No | Creation date.                                           |
+| `updated`  |                  No | Last update date.                                        |
+| `redirect` |                  No | Page ID to redirect to.                                  |
 
 ---
 
@@ -842,17 +842,9 @@ Example index entry:
   "title": "Pi-mono iPhone Gateway",
   "tags": ["pi-mono", "iphone", "cloudflare", "gateway"],
   "aliases": [],
-  "links": [
-    "architecture/pi-mono-rpc",
-    "architecture/cloudflare-tunnel"
-  ],
-  "externalLinks": [
-    "https://github.com/badlogic/pi-mono"
-  ],
-  "headings": [
-    "Main components",
-    "Related"
-  ],
+  "links": ["architecture/pi-mono-rpc", "architecture/cloudflare-tunnel"],
+  "externalLinks": ["https://github.com/badlogic/pi-mono"],
+  "headings": ["Main components", "Related"],
   "updated": "2026-05-09"
 }
 ```
@@ -1087,7 +1079,7 @@ Conceptual TypeScript:
 async function modifyPage(
   id: PageId,
   expectedVersion: string | undefined,
-  modify: (current: string | null) => string,
+  modify: (current: string | null) => string
 ): Promise<WriteResult> {
   return await withPageLock(id, async () => {
     const current = await readPageIfExists(id);
@@ -1109,7 +1101,7 @@ async function modifyPage(
     return {
       id,
       previousVersion: currentVersion,
-      version: hash(next),
+      version: hash(next)
     };
   });
 }
@@ -1248,16 +1240,16 @@ Command-line `--root` should override `AGENT_WIKI_ROOT`.
 
 Use predictable exit codes:
 
-| Code | Meaning |
-|---:|---|
-| 0 | Success |
-| 1 | Not found / false result |
-| 2 | Invalid arguments |
-| 3 | Validation failed |
-| 4 | Write conflict |
-| 5 | Filesystem error |
-| 6 | Lock timeout |
-| 7 | Index error |
+| Code | Meaning                  |
+| ---: | ------------------------ |
+|    0 | Success                  |
+|    1 | Not found / false result |
+|    2 | Invalid arguments        |
+|    3 | Validation failed        |
+|    4 | Write conflict           |
+|    5 | Filesystem error         |
+|    6 | Lock timeout             |
+|    7 | Index error              |
 
 ---
 

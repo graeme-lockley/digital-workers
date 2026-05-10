@@ -1,7 +1,9 @@
 # <Story Title>
 
 ## Sequence: S##-##
+
 ## Tier: <tier or Optional>
+
 ## Former ID: (none)
 
 ## Epic

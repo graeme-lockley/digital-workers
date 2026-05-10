@@ -27,7 +27,7 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 
 1. Locate source file in `docs/kanban/stories/unplanned/`.
 2. Ensure unplanned sections are present and filled.
-3. Append missing planned sections from [../_templates/story-planned-additions.md](../_templates/story-planned-additions.md).
+3. Append missing planned sections from [../\_templates/story-planned-additions.md](../_templates/story-planned-additions.md).
 4. Populate:
    - `Impact analysis`
    - `Tasks` with actionable checkbox items

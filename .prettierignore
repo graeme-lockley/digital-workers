@@ -2,3 +2,5 @@
 .turbo/
 dist/
 node_modules/
+scripts/plan-epic.yaml
+scripts/run-loop.yaml

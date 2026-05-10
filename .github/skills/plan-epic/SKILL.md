@@ -50,10 +50,10 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 5. Allocate story ids for this epic:
    - story prefix is `S<epic-number>`
    - choose next free story sequence by scanning `docs/kanban/stories/{unplanned,planned,doing,done}/`
-6. Create each story file in `docs/kanban/stories/unplanned/` using [../_templates/story-unplanned.md](../_templates/story-unplanned.md).
+6. Create each story file in `docs/kanban/stories/unplanned/` using [../\_templates/story-unplanned.md](../_templates/story-unplanned.md).
 7. Fill all required sections with concrete content derived from epic/spec context:
    - `Summary`, `Current State`, `Relationship to other stories`, `Goals`, `Acceptance Criteria`, `Spec References`, `Risks / Notes`
-8. Replace epic `## Stories` section using [../_templates/epic-stories-ordered.md](../_templates/epic-stories-ordered.md):
+8. Replace epic `## Stories` section using [../\_templates/epic-stories-ordered.md](../_templates/epic-stories-ordered.md):
    - include ordered links to created story files
    - include one-line description per story
    - include a short note if any stories can be done in parallel

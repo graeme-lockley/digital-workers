@@ -3,7 +3,7 @@
 **Document status:** Draft v1.0  
 **Date:** 2026-05-08  
 **Primary user:** Individual developer/operator running pi-mono locally  
-**Working title:** Pi Mobile Gateway  
+**Working title:** Pi Mobile Gateway
 
 ---
 

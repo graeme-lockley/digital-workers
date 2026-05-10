@@ -22,7 +22,7 @@ Define the secure remote ingress gateway. The gateway is the only path by which 
 ## Design
 
 - Gateway never touches storage directly; everything flows through runtime APIs.
-- Auth is enforced both at Cloudflare Access *and* independently at the gateway (defence in depth).
+- Auth is enforced both at Cloudflare Access _and_ independently at the gateway (defence in depth).
 - The gateway forwards `correlationId` to the client so the client can demultiplex.
 
 ## Interfaces

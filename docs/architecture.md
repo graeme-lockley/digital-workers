@@ -4,7 +4,7 @@
 **Date:** 2026-05-09  
 **Vision:** A local-first system for running a company of collaborative digital workers (agents), with shared knowledge via a wiki, config-driven workspaces, and multiple user interfaces (TUI, mobile, API).
 
-**Scope of this document:** This document describes the *target architecture*. It is intentionally silent on build sequencing, MVP slicing, and delivery phasing. Those concerns are owned by a separate document, `docs/specs/implementation-strategy.md`, which sequences the epics required to realise this architecture.
+**Scope of this document:** This document describes the _target architecture_. It is intentionally silent on build sequencing, MVP slicing, and delivery phasing. Those concerns are owned by a separate document, `docs/specs/implementation-strategy.md`, which sequences the epics required to realise this architecture.
 
 ---
 
@@ -13,6 +13,7 @@
 Simple-agent evolves from a single AI assistant tool into a platform for orchestrating multiple collaborative agents.
 
 **Key insights:**
+
 1. The TUI and mobile interfaces are just clients; the real system is a headless core runtime.
 2. Each digital worker needs isolation (its own root folder, permissions, execution state).
 3. Workers share a common wiki for knowledge, but each has private workspace state.
@@ -21,6 +22,7 @@ Simple-agent evolves from a single AI assistant tool into a platform for orchest
 6. All interfaces (TUI, mobile gateway, CLI, future web UI) call the same core API.
 
 **The model:**
+
 - One workspace config defines the composition of the entire system.
 - One wiki root stores shared knowledge.
 - Many worker roots store isolated execution state.
@@ -77,16 +79,16 @@ Simple-agent evolves from a single AI assistant tool into a platform for orchest
    Each worker has its own root folder, permissions, transcript, and lifecycle. One worker cannot corrupt another's state.
 
 4. **Wiki is shared knowledge.**  
-  Workers can read and, subject to permissions, create/update/append/delete wiki content. The wiki is the canonical current knowledge base for organizational memory.
+   Workers can read and, subject to permissions, create/update/append/delete wiki content. The wiki is the canonical current knowledge base for organizational memory.
 
 5. **Configuration is declarative.**  
    The workspace shape, worker definitions, permissions, and communication channels are all declared in configuration. No hardcoding.
 
 6. **Storage is local-first and durable.**  
-  Everything is stored on the filesystem. No mandatory database. Operational logs (transcripts, audit, message logs, task logs) are append-only JSON Lines. Wiki content is mutable by design. Git-friendly.
+   Everything is stored on the filesystem. No mandatory database. Operational logs (transcripts, audit, message logs, task logs) are append-only JSON Lines. Wiki content is mutable by design. Git-friendly.
 
 7. **Communication is structured.**  
-  Worker-to-worker messaging and router delivery use schema-validated events. No terminal scraping or unstructured text passing.
+   Worker-to-worker messaging and router delivery use schema-validated events. No terminal scraping or unstructured text passing.
 
 ---
 
@@ -352,23 +354,26 @@ The core runtime is the headless execution engine. It is **not** a UI; it does n
    - Handle worker restarts and graceful shutdowns.
 
 3. **Sandbox and Shell Control**
-  - Create one sandbox per worker according to configured policy.
-  - Enforce filesystem boundaries and constrained shell semantics.
-  - Support pluggable sandbox backends (virtual, local-mounted, remote container).
-  - Make persistence behavior explicit and configurable.
+
+- Create one sandbox per worker according to configured policy.
+- Enforce filesystem boundaries and constrained shell semantics.
+- Support pluggable sandbox backends (virtual, local-mounted, remote container).
+- Make persistence behavior explicit and configurable.
 
 4. **Routing & Messaging (Plumbing Only)**
    - Deliver messages between workers (and between external callers and workers).
    - Assign and propagate correlation IDs so senders can match responses to requests.
    - Persist all messages durably before delivery (append-only).
    - Enforce per-worker messaging permissions (allowlist).
-  - **The router does not orchestrate, route by capability, schedule, or rank workers.** Coordination is the responsibility of a designated worker (for example, `maya`), not the runtime.
+
+- **The router does not orchestrate, route by capability, schedule, or rank workers.** Coordination is the responsibility of a designated worker (for example, `maya`), not the runtime.
 
 5. **Storage Access**
-  - Read/write/delete wiki content (with optional ACLs).
-   - Manage worker-specific state folders.
-   - Persist transcripts and audit logs as append-only JSON Lines.
-   - Handle locking and conflict detection.
+
+- Read/write/delete wiki content (with optional ACLs).
+- Manage worker-specific state folders.
+- Persist transcripts and audit logs as append-only JSON Lines.
+- Handle locking and conflict detection.
 
 6. **API Surface**
    - RESTful or gRPC API for all interface clients.
@@ -402,21 +407,27 @@ Wiki access semantics (boundary):
 // Channel-facing interaction lifecycle
 interface SessionAPI {
   // Channels first call RuntimeConfigAPI.listWorkspaces(), then create a session in the chosen workspace.
-  createSession(workspaceId: WorkspaceId, config: SessionConfig): Promise<SessionId>;
+  createSession(
+    workspaceId: WorkspaceId,
+    config: SessionConfig
+  ): Promise<SessionId>;
   resumeSession(sessionId: SessionId): Promise<SessionHandle>;
   forkSession(sessionId: SessionId): Promise<SessionId>;
   getSessionStatus(sessionId: SessionId): Promise<SessionStatus>;
   terminateSession(sessionId: SessionId): Promise<void>;
   // Returns both a messageId and a correlationId. The correlationId is used to
   // subscribe to SSE events related to this specific exchange (see subscribeToEvents).
-  sendMessage(sessionId: SessionId, text: string): Promise<{ messageId: MessageId; correlationId: string }>;
+  sendMessage(
+    sessionId: SessionId,
+    text: string
+  ): Promise<{ messageId: MessageId; correlationId: string }>;
   abortRun(sessionId: SessionId, runId: RunId): Promise<void>;
   subscribeToEvents(sessionId: SessionId): AsyncIterable<Event>;
 }
 
 // Session configuration
 interface SessionConfig {
-  identity?: string;        // caller identity (for audit/logging)
+  identity?: string; // caller identity (for audit/logging)
   metadata?: Record<string, unknown>;
 }
 
@@ -443,10 +454,7 @@ interface WorkerManagerAPI {
   // Get current status of a specific worker.
   getWorkerStatus(workerId: WorkerId): Promise<WorkerStatus>;
   // Send a message to a worker (used for commands like /status, /abandon).
-  sendToWorker(
-    workerId: WorkerId,
-    message: WorkerMessage
-  ): Promise<MessageId>;
+  sendToWorker(workerId: WorkerId, message: WorkerMessage): Promise<MessageId>;
   // Get the full transcript for a worker.
   getWorkerTranscript(workerId: WorkerId): Promise<Transcript>;
   // Subscribe to worker lifecycle events (started, running, idle, error, stopped).
@@ -455,8 +463,8 @@ interface WorkerManagerAPI {
 
 // Type definitions for the above APIs
 
-type WorkspaceId = string;  // e.g., "default", "mobile-gateway-sandbox"
-type WorkerId = string;     // e.g., "alice", "ben", "maya"
+type WorkspaceId = string; // e.g., "default", "mobile-gateway-sandbox"
+type WorkerId = string; // e.g., "alice", "ben", "maya"
 type SessionId = string;
 type MessageId = string;
 type RunId = string;
@@ -480,8 +488,15 @@ interface WorkspaceConfig {
 interface WorkerInfo {
   id: WorkerId;
   workspaceId: WorkspaceId;
-  name: string;              // Digital worker has a name (models a human worker, not a role type)
-  status: "created" | "starting" | "ready" | "running" | "paused" | "error" | "stopped";
+  name: string; // Digital worker has a name (models a human worker, not a role type)
+  status:
+    | "created"
+    | "starting"
+    | "ready"
+    | "running"
+    | "paused"
+    | "error"
+    | "stopped";
   rootFolder: string;
   createdAt: ISO8601Timestamp;
   startedAt?: ISO8601Timestamp;
@@ -503,7 +518,7 @@ interface WorkerStatus {
     lastUpdatedAt: ISO8601Timestamp;
   };
   errorMessage?: string;
-  uptime?: number;           // seconds
+  uptime?: number; // seconds
 }
 
 interface WorkerEvent {
@@ -519,6 +534,7 @@ type ISO8601Timestamp = string;
 **Channel Initialization (Workspace Discovery):**
 
 Channels initialize by calling `RuntimeConfigAPI.listWorkspaces()` to discover available workspaces, typically at startup or on user request. The channel then:
+
 1. Lets the user (or config) choose a workspace.
 2. Calls `SessionAPI.createSession(workspaceId, sessionConfig)` to create a session in that workspace.
 3. Sends messages and subscribes to events through the session for the remainder of the interaction.
@@ -529,7 +545,9 @@ This ensures workspaces and workers are discovered dynamically, not hardcoded.
 // Routing & messaging (plumbing only)
 interface RouterAPI {
   // Deliver a message to a worker. Returns immediately with a correlation handle.
-  send(message: WorkerMessage): Promise<{ messageId: string; correlationId: string }>;
+  send(
+    message: WorkerMessage
+  ): Promise<{ messageId: string; correlationId: string }>;
 
   // Subscribe to messages for a given correlation (e.g. responses to an earlier request).
   subscribeByCorrelation(correlationId: string): AsyncIterable<WorkerMessage>;
@@ -666,7 +684,7 @@ workers:
     runtime:
       agentRuntime: pi-mono
       mode: rpc
-      apiEnvName: ANTHROPIC_API_KEY        # env var holding the model API key
+      apiEnvName: ANTHROPIC_API_KEY # env var holding the model API key
       model: claude-opus-4.7
     compaction:
       enabled: true
@@ -675,7 +693,7 @@ workers:
       pluginCommand: distill --format json
       outputSchema: canonical-v1
       thresholds:
-        transcriptBytes: 2000000           # ~2 MB
+        transcriptBytes: 2000000 # ~2 MB
         innerLoopIterations: 50
         objectiveContextTokens: 30000
       trigger:
@@ -781,17 +799,17 @@ workers:
 
 Each worker is isolated from every other:
 
-| Aspect | Isolation |
-|--------|-----------|
-| Root folder | Separate, no cross-access |
-| Sandbox filesystem | Explicit sandbox per worker |
+| Aspect                 | Isolation                              |
+| ---------------------- | -------------------------------------- |
+| Root folder            | Separate, no cross-access              |
+| Sandbox filesystem     | Explicit sandbox per worker            |
 | Filesystem permissions | Scoped to worker root + wiki root only |
-| Shell access | Constrained by per-worker shell policy |
-| Transcript | Private to that worker |
-| Audit log | Private to that worker |
-| Execution context | Separate OS process or container |
-| Tools | Defined by worker config |
-| Messaging | Explicit allowlist only |
+| Shell access           | Constrained by per-worker shell policy |
+| Transcript             | Private to that worker                 |
+| Audit log              | Private to that worker                 |
+| Execution context      | Separate OS process or container       |
+| Tools                  | Defined by worker config               |
+| Messaging              | Explicit allowlist only                |
 
 ### 6.4 Single-Execution-Loop Principle (Outer + Inner)
 
@@ -809,7 +827,7 @@ This is a key architectural constraint.
 **Outer loop behavior (authoritative):**
 
 - The worker waits (does not pop) until at least one message is present in the inbox. Timeout is effectively infinite (idle forever is expected behaviour).
-- The outer loop **inspects all queued messages** and selects the next one to attend to based on priority, correlation, and the worker’s own judgement. It is not a strict FIFO; the inbox is a *queue of pending work*, not a strict pipeline.
+- The outer loop **inspects all queued messages** and selects the next one to attend to based on priority, correlation, and the worker’s own judgement. It is not a strict FIFO; the inbox is a _queue of pending work_, not a strict pipeline.
 - The selected message is then consumed (removed from the inbox) and processed.
 - The worker uses judgment to formulate/refine the objective and plan, even when the incoming message includes an explicit objective.
 - On inner-loop completion, the outer loop decides whether the objective is achieved.
@@ -882,13 +900,13 @@ interface WorkerState {
   currentObjectiveId?: string;
   lastProcessedMessageId: string;
   inbox: WorkerMessage[];
-  commandQueue: WorkerCommand[];        // immediate commands
+  commandQueue: WorkerCommand[]; // immediate commands
   outbox: WorkerMessage[];
   outerContext: Record<string, unknown>; // survives across objectives
   objectiveContext?: Record<string, unknown>; // cleared on objective completion
   taskList: WorkerTask[];
-  transcript: Transcript;               // full inner-loop logs retained
-  memorySummary: MemoryEntry[];         // distilled insights
+  transcript: Transcript; // full inner-loop logs retained
+  memorySummary: MemoryEntry[]; // distilled insights
   auditLog: AuditEntry[];
 }
 ```
@@ -987,6 +1005,7 @@ workspace:
 ### 7.2 Loading and Validation
 
 The config loader:
+
 1. Loads workspace definition from `config.yaml`.
 2. Validates schema against zod types.
 3. Resolves relative paths (relative to workspace root).
@@ -1001,7 +1020,7 @@ export async function loadWorkspaceConfig(
 ): Promise<WorkspaceConfiguration> {
   const raw = await readYaml(configPath);
   const validated = WorkspaceConfigSchema.parse(raw);
-  
+
   // Validate paths
   for (const worker of validated.workers) {
     const workerRoot = resolve(dirname(configPath), worker.rootFolder);
@@ -1009,7 +1028,7 @@ export async function loadWorkspaceConfig(
       throw new Error(`Worker root does not exist: ${workerRoot}`);
     }
   }
-  
+
   return validated;
 }
 ```
@@ -1109,9 +1128,9 @@ const { messageId, correlationId } = await router.send({
   type: "request",
   payload: {
     action: "investigate",
-    query: "What is the current state of Cloudflare Tunnel API?",
+    query: "What is the current state of Cloudflare Tunnel API?"
   },
-  createdAt: new Date().toISOString(),
+  createdAt: new Date().toISOString()
 });
 
 // Later, observe responses tagged with this correlation:
@@ -1138,15 +1157,15 @@ All worker messages use a unified schema (defined in `packages/protocol`):
 
 ```typescript
 interface WorkerMessage {
-  id: string;                      // unique message ID
-  correlationId: string;           // identifies the conversation/exchange
+  id: string; // unique message ID
+  correlationId: string; // identifies the conversation/exchange
   from: WorkerId | ExternalCallerId;
   to: WorkerId;
   type: "request" | "response" | "event" | "ack" | "command";
-  payload: unknown;                // validated by zod
-  inReplyTo?: string;              // for responses
+  payload: unknown; // validated by zod
+  inReplyTo?: string; // for responses
   createdAt: ISO8601Timestamp;
-  expiresAt?: ISO8601Timestamp;    // optional TTL
+  expiresAt?: ISO8601Timestamp; // optional TTL
   metadata?: {
     priority?: "low" | "normal" | "high";
     requiresAck?: boolean;
@@ -1171,7 +1190,6 @@ interface WorkerCommand {
   issuedBy: string; // worker id or external caller identity
 }
 ```
- 
 
 ### 9.4 Coordination Is a Worker Responsibility
 
@@ -1205,11 +1223,11 @@ interface InnerLoopOutcome {
   objectiveText: string;
   achieved: boolean;
   completionReason: "success" | "partial" | "blocked" | "abandoned" | "timeout";
-  summary: string;                     // concise handoff for outer loop
-  insights: string[];                  // candidate memory entries
-  fullLogRef: string;                  // transcript pointer/id
+  summary: string; // concise handoff for outer loop
+  insights: string[]; // candidate memory entries
+  fullLogRef: string; // transcript pointer/id
   toolsUsed: string[];
-  explicitWikiWrites: string[];        // page ids changed by inner loop
+  explicitWikiWrites: string[]; // page ids changed by inner loop
   suggestedImplicitWikiUpdates: string[];
   supportRequests: Array<{ targetWorker: WorkerId; reason: string }>;
   nextActions: string[];
@@ -1446,7 +1464,7 @@ This separation is intentional: the architecture is the destination; the impleme
    No worker can corrupt another worker's state.
 
 4. **Each Worker Is a Single, Serial Event Loop**  
-  Workers process messages sequentially through one outer loop that invokes one objective-scoped inner tool loop. No unbounded concurrency within a worker.
+   Workers process messages sequentially through one outer loop that invokes one objective-scoped inner tool loop. No unbounded concurrency within a worker.
 
 5. **Configuration Drives All Worker Definitions**  
    No hardcoding worker capabilities or permissions.
@@ -1464,31 +1482,31 @@ This separation is intentional: the architecture is the destination; the impleme
    The runtime provides a message router only. Coordination, decomposition, and task routing are worker responsibilities, not runtime features.
 
 10. **Each Worker Is Its Own OS Process**  
-   Workers run as separate processes driven over RPC (currently `pi-mono` in RPC mode). The runtime never imports an agent in-process.
+    Workers run as separate processes driven over RPC (currently `pi-mono` in RPC mode). The runtime never imports an agent in-process.
 
 11. **Commands Preempt Work**  
-  `/status`, `/abandon`, and `/shutdown` are immediate, ordered, and auditable via a dedicated command queue. `/abandon` and `/shutdown` set a cancellation token observed by the inner loop and propagated to the underlying LLM/tool calls.
+    `/status`, `/abandon`, and `/shutdown` are immediate, ordered, and auditable via a dedicated command queue. `/abandon` and `/shutdown` set a cancellation token observed by the inner loop and propagated to the underlying LLM/tool calls.
 
 12. **Compaction Is Pluggable, With a Mandatory Fallback**  
-  Context compaction runs via per-worker plugin strategy (for example, `distill`). If the plugin fails or times out, a crude built-in fallback must succeed and never block the outer loop.
+    Context compaction runs via per-worker plugin strategy (for example, `distill`). If the plugin fails or times out, a crude built-in fallback must succeed and never block the outer loop.
 
 13. **Sandboxing Is Pluggable**  
-  Worker isolation depends on a sandbox provider contract, not on any single framework or package.
+    Worker isolation depends on a sandbox provider contract, not on any single framework or package.
 
 14. **Sandbox Persistence Is Explicit**  
-  Whether a worker filesystem endures between executions must be declared by policy (`ephemeral`, `objective`, `worker`, `workspace`).
+    Whether a worker filesystem endures between executions must be declared by policy (`ephemeral`, `objective`, `worker`, `workspace`).
 
 15. **Compaction Schema Is Canonical**  
-  Plugin diversity is allowed, but persisted compaction output must validate against one canonical JSON schema.
+    Plugin diversity is allowed, but persisted compaction output must validate against one canonical JSON schema.
 
 16. **Shell Access Is Allowlist-Only**  
-  No system shell is invoked. Each allowed command pins an absolute executable path and an argv regex. Shell metacharacters in argv are rejected. Symlinks are resolved before boundary checks.
+    No system shell is invoked. Each allowed command pins an absolute executable path and an argv regex. Shell metacharacters in argv are rejected. Symlinks are resolved before boundary checks.
 
 17. **Single Runtime: Node.js**  
-  The entire monorepo is Node.js. There are no Deno apps. One toolchain, one CI matrix.
+    The entire monorepo is Node.js. There are no Deno apps. One toolchain, one CI matrix.
 
 18. **API Is Versioned and Stable**  
-   Always increment API version when breaking changes are needed. Maintain backward compatibility where possible.
+    Always increment API version when breaking changes are needed. Maintain backward compatibility where possible.
 
 ---
 
@@ -1498,29 +1516,29 @@ The system is local-first but exposes remote interfaces (mobile gateway via Clou
 
 ### 14.1 Adversaries
 
-| # | Adversary | Capability |
-|---|-----------|------------|
-| A1 | Remote network attacker | Can reach the public Cloudflare hostname; cannot bypass Cloudflare Access. |
-| A2 | Authenticated remote user | Has valid Cloudflare Access identity; can submit arbitrary prompts. |
-| A3 | Malicious LLM output | The model returns text/tool-calls intended to escape the sandbox or exfiltrate data. |
-| A4 | Hostile content (web, wiki) | A page or wiki entry contains prompt-injection instructions targeting a worker that reads it. |
-| A5 | Compromised dependency | An npm dependency ships malicious code. |
-| A6 | Local user with shell access | Out of scope; treated as fully trusted. |
+| #   | Adversary                    | Capability                                                                                    |
+| --- | ---------------------------- | --------------------------------------------------------------------------------------------- |
+| A1  | Remote network attacker      | Can reach the public Cloudflare hostname; cannot bypass Cloudflare Access.                    |
+| A2  | Authenticated remote user    | Has valid Cloudflare Access identity; can submit arbitrary prompts.                           |
+| A3  | Malicious LLM output         | The model returns text/tool-calls intended to escape the sandbox or exfiltrate data.          |
+| A4  | Hostile content (web, wiki)  | A page or wiki entry contains prompt-injection instructions targeting a worker that reads it. |
+| A5  | Compromised dependency       | An npm dependency ships malicious code.                                                       |
+| A6  | Local user with shell access | Out of scope; treated as fully trusted.                                                       |
 
 ### 14.2 Threats and Controls
 
-| # | Threat | Primary Control |
-|---|--------|-----------------|
-| T1 | Unauthenticated remote access | Cloudflare Access in front of the gateway; gateway rejects requests without a validated `X-Forwarded-Email` matching the allowlist. |
-| T2 | Worker writes outside its `rootFolder` | `packages/security/workspace-boundary` resolves `realpath` and rejects any path not under the allowed root, applied to every fs operation including symlink targets. |
-| T3 | Worker executes arbitrary shell command | Allowlist-only `ShellPolicy` (no blocklist), absolute-path pinning, argv regex, no system shell invocation, shell-metacharacter rejection. |
-| T4 | Prompt injection from wiki/web content | (a) All ingested external content is wrapped with explicit provenance markers in the worker context. (b) Wiki append from a worker is permission-gated. (c) Workers may not execute tool calls that originated from injected text without an outer-loop confirmation step (planned: see Risk R3). |
-| T5 | Cross-worker context leak | Workers run in separate OS processes; transcripts/audit logs are per-worker; the wiki is the only shared write surface and is permission-gated. |
-| T6 | Secret exfiltration via LLM output or logs | `packages/security/secrets` redacts known patterns before write to transcript/audit/log; `apiEnvName` is referenced indirectly so the actual value never appears in config. |
-| T7 | TOCTOU on filesystem boundary | Symlinks are resolved (`realpath`) and re-checked immediately before the privileged operation; same handle is used for the actual call where the OS supports it. |
-| T8 | Runaway token spend | Per-worker `task_timeout_seconds`, `max_concurrent_tasks`, and per-worker compaction thresholds limit growth. (A future `tokenBudget` field is anticipated.) |
-| T9 | Compromised dependency | Lockfile pinning, `pnpm audit` in CI, no `postinstall` scripts, dependency review for new packages, allowlist for sandbox adapters. |
-| T10 | Denial of service via prompt flood | Gateway rate-limits per-identity; router rejects messages exceeding per-worker inbox depth. |
+| #   | Threat                                     | Primary Control                                                                                                                                                                                                                                                                                   |
+| --- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T1  | Unauthenticated remote access              | Cloudflare Access in front of the gateway; gateway rejects requests without a validated `X-Forwarded-Email` matching the allowlist.                                                                                                                                                               |
+| T2  | Worker writes outside its `rootFolder`     | `packages/security/workspace-boundary` resolves `realpath` and rejects any path not under the allowed root, applied to every fs operation including symlink targets.                                                                                                                              |
+| T3  | Worker executes arbitrary shell command    | Allowlist-only `ShellPolicy` (no blocklist), absolute-path pinning, argv regex, no system shell invocation, shell-metacharacter rejection.                                                                                                                                                        |
+| T4  | Prompt injection from wiki/web content     | (a) All ingested external content is wrapped with explicit provenance markers in the worker context. (b) Wiki append from a worker is permission-gated. (c) Workers may not execute tool calls that originated from injected text without an outer-loop confirmation step (planned: see Risk R3). |
+| T5  | Cross-worker context leak                  | Workers run in separate OS processes; transcripts/audit logs are per-worker; the wiki is the only shared write surface and is permission-gated.                                                                                                                                                   |
+| T6  | Secret exfiltration via LLM output or logs | `packages/security/secrets` redacts known patterns before write to transcript/audit/log; `apiEnvName` is referenced indirectly so the actual value never appears in config.                                                                                                                       |
+| T7  | TOCTOU on filesystem boundary              | Symlinks are resolved (`realpath`) and re-checked immediately before the privileged operation; same handle is used for the actual call where the OS supports it.                                                                                                                                  |
+| T8  | Runaway token spend                        | Per-worker `task_timeout_seconds`, `max_concurrent_tasks`, and per-worker compaction thresholds limit growth. (A future `tokenBudget` field is anticipated.)                                                                                                                                      |
+| T9  | Compromised dependency                     | Lockfile pinning, `pnpm audit` in CI, no `postinstall` scripts, dependency review for new packages, allowlist for sandbox adapters.                                                                                                                                                               |
+| T10 | Denial of service via prompt flood         | Gateway rate-limits per-identity; router rejects messages exceeding per-worker inbox depth.                                                                                                                                                                                                       |
 
 ### 14.3 Out of Scope
 
@@ -1534,25 +1552,26 @@ The system is local-first but exposes remote interfaces (mobile gateway via Clou
 
 Every durable surface in the system has a defined schema, writer, reader, growth bound, and compaction/rotation policy. No stateful surface may exist outside this table.
 
-| Store | Path / Location | Schema (package) | Writer | Reader(s) | Growth Bound | Compaction / Rotation |
-|-------|-----------------|------------------|--------|-----------|--------------|-----------------------|
-| Workspace config | `workspaces/<id>/config.yaml` | `WorkspaceConfigSchema` (config) | Human (git) | Runtime at startup | Bounded by workers count | N/A (versioned in git) |
-| Wiki pages | `workspaces/<id>/wiki/**.md` | Markdown + frontmatter | Workers (gated) and humans | All workers, web UI, CLI | Unbounded (human-curated) | Manual / wiki tooling |
-| Wiki index | `workspaces/<id>/wiki/.agent-wiki/` | Index format (agent-wiki) | Wiki service | Wiki service | O(pages) | Rebuilt on demand |
-| Worker transcript | `workers/<id>/transcript.jsonl` | `TranscriptEntry` (protocol) | Worker (outer+inner) | Worker, transcript viewer | `policy.maxTranscriptSizeMB` | Rotation at threshold; archived per worker |
-| Worker audit log | `workers/<id>/audit.jsonl` | `AuditEntry` (protocol) | Worker, runtime | Audit viewer, compliance | `policy.auditLogRetentionDays` | Time-based archival |
-| Worker memory summary | `workers/<id>/memory.jsonl` | `MemoryEntry` (protocol) | Compaction output | Worker outer loop | Bounded; compaction merges/evicts | Compaction plugin |
-| Worker workspace fs | `workers/<id>/workspace/` | Free-form files | Worker (sandboxed) | Worker | Sandbox quota | Per-worker policy |
-| Worker scratch fs | `workers/<id>/scratch/` | Free-form files | Worker (sandboxed) | Worker | Cleared on objective end (config) | Objective-end clear |
-| Worker outer context | In-memory, snapshotted to `workers/<id>/outer-context.json` | `OuterContext` (protocol) | Worker outer loop | Worker outer loop, `/status` | Bounded by schema fields (no free bag) | Snapshotted on every objective end |
-| Worker inbox | `state/inbox/<workerId>.jsonl` | `WorkerMessage` (protocol) | Router | Worker outer loop | Bounded by `inboxMaxDepth` (config) | Consumed messages truncated periodically |
-| Worker command queue | `state/command-queue/<workerId>.jsonl` | `WorkerCommand` (protocol) | Router, gateway, TUI | Worker outer loop | Bounded; commands consumed immediately | Consumed entries truncated |
-| Message log | `state/message-log.jsonl` | `WorkerMessage` (protocol) | Router | Audit, replay | Append-only; rotated by size | Size-based rotation |
-| Dead-letter queue | `state/dlq.jsonl` | `WorkerMessage` (protocol) | Router | Operator | Append-only | Manual review |
-| Sessions | `state/sessions.jsonl` | `Session` (protocol) | Session manager | Session manager, gateway, TUI | Bounded by active sessions | Append-only; old sessions archived |
-| Task graph (optional, per-worker) | `workers/<id>/tasks.jsonl` | `TaskRecord` (protocol) | Owner worker | Owner worker | Append-only | Worker-driven |
+| Store                             | Path / Location                                             | Schema (package)                 | Writer                     | Reader(s)                     | Growth Bound                           | Compaction / Rotation                      |
+| --------------------------------- | ----------------------------------------------------------- | -------------------------------- | -------------------------- | ----------------------------- | -------------------------------------- | ------------------------------------------ |
+| Workspace config                  | `workspaces/<id>/config.yaml`                               | `WorkspaceConfigSchema` (config) | Human (git)                | Runtime at startup            | Bounded by workers count               | N/A (versioned in git)                     |
+| Wiki pages                        | `workspaces/<id>/wiki/**.md`                                | Markdown + frontmatter           | Workers (gated) and humans | All workers, web UI, CLI      | Unbounded (human-curated)              | Manual / wiki tooling                      |
+| Wiki index                        | `workspaces/<id>/wiki/.agent-wiki/`                         | Index format (agent-wiki)        | Wiki service               | Wiki service                  | O(pages)                               | Rebuilt on demand                          |
+| Worker transcript                 | `workers/<id>/transcript.jsonl`                             | `TranscriptEntry` (protocol)     | Worker (outer+inner)       | Worker, transcript viewer     | `policy.maxTranscriptSizeMB`           | Rotation at threshold; archived per worker |
+| Worker audit log                  | `workers/<id>/audit.jsonl`                                  | `AuditEntry` (protocol)          | Worker, runtime            | Audit viewer, compliance      | `policy.auditLogRetentionDays`         | Time-based archival                        |
+| Worker memory summary             | `workers/<id>/memory.jsonl`                                 | `MemoryEntry` (protocol)         | Compaction output          | Worker outer loop             | Bounded; compaction merges/evicts      | Compaction plugin                          |
+| Worker workspace fs               | `workers/<id>/workspace/`                                   | Free-form files                  | Worker (sandboxed)         | Worker                        | Sandbox quota                          | Per-worker policy                          |
+| Worker scratch fs                 | `workers/<id>/scratch/`                                     | Free-form files                  | Worker (sandboxed)         | Worker                        | Cleared on objective end (config)      | Objective-end clear                        |
+| Worker outer context              | In-memory, snapshotted to `workers/<id>/outer-context.json` | `OuterContext` (protocol)        | Worker outer loop          | Worker outer loop, `/status`  | Bounded by schema fields (no free bag) | Snapshotted on every objective end         |
+| Worker inbox                      | `state/inbox/<workerId>.jsonl`                              | `WorkerMessage` (protocol)       | Router                     | Worker outer loop             | Bounded by `inboxMaxDepth` (config)    | Consumed messages truncated periodically   |
+| Worker command queue              | `state/command-queue/<workerId>.jsonl`                      | `WorkerCommand` (protocol)       | Router, gateway, TUI       | Worker outer loop             | Bounded; commands consumed immediately | Consumed entries truncated                 |
+| Message log                       | `state/message-log.jsonl`                                   | `WorkerMessage` (protocol)       | Router                     | Audit, replay                 | Append-only; rotated by size           | Size-based rotation                        |
+| Dead-letter queue                 | `state/dlq.jsonl`                                           | `WorkerMessage` (protocol)       | Router                     | Operator                      | Append-only                            | Manual review                              |
+| Sessions                          | `state/sessions.jsonl`                                      | `Session` (protocol)             | Session manager            | Session manager, gateway, TUI | Bounded by active sessions             | Append-only; old sessions archived         |
+| Task graph (optional, per-worker) | `workers/<id>/tasks.jsonl`                                  | `TaskRecord` (protocol)          | Owner worker               | Owner worker                  | Append-only                            | Worker-driven                              |
 
 **`transcript.jsonl`** is the full inner-loop execution log — what the worker thought and did:
+
 - Messages received and sent (full content)
 - Every tool call and its result (web_fetch, read, write, shell, etc.)
 - The worker's reasoning steps as surfaced by pi-mono
@@ -1562,6 +1581,7 @@ Every durable surface in the system has a defined schema, writer, reader, growth
 This is the raw material for compaction. It may be large and is subject to rotation and archival.
 
 **`audit.jsonl`** is the security and operational audit trail — what the system recorded at the boundary:
+
 - Worker started, stopped, crashed
 - Message envelope metadata (sender, recipient, type, correlation ID - not full content)
 - Permission checks and rejections (e.g. shell command blocked by allowlist)
@@ -1579,18 +1599,18 @@ Audit entries must be retained and are never compacted away. They are what a com
 
 The architecture is sound but rests on assumptions and external components. Risks worth carrying explicitly into the implementation strategy:
 
-| # | Risk | Likelihood | Impact | Mitigation |
-|---|------|------------|--------|------------|
-| R1 | `pi-mono` RPC mode evolves incompatibly | Medium | High | Pin version; abstract behind a `WorkerRuntime` interface in `core-runtime`; keep one alternative adapter scaffolded. |
-| R2 | Compaction plugin (`distill`) is unmaintained or low quality | Medium | Medium | Per-worker fallback is mandatory (Design Rule 12); validate output against `CompactionArtifactV1` before persisting. |
-| R3 | Prompt injection from wiki/web bypasses worker judgement | High | High | Spike: design a provenance-tagging protocol for ingested content and an outer-loop confirmation step for tool calls originating from external text. |
-| R4 | Cancellation does not propagate cleanly into LLM SDK calls | Medium | Medium | Spike: validate `AbortController` propagation through `pi-mono` to the model SDK; document any residual latency. |
-| R5 | Sandbox boundary holes on macOS (case-insensitive FS, symlinks, `/private` aliases) | Medium | High | Spike: write a focused boundary test suite covering symlink traversal, case-folded paths, and `realpath` aliases before relying on `workspace-boundary`. |
-| R6 | Astro is overkill or under-powered for the wiki UI | Low | Low | Decision is reversible; the wiki UI calls a stable wiki service boundary (owned by the wiki PRD and consumed by CLI/skills), so the UI framework can be replaced without core-runtime changes. |
-| R7 | Cloudflare Access misconfiguration exposes the gateway | Low | High | Infra-as-code in `infra/cloudflare/`; gateway also independently validates `X-Forwarded-Email` and refuses unauthenticated requests. |
-| R8 | Per-process worker overhead dominates on small machines | Low | Medium | Worker count is small and pi-mono startup is short in practice; if it ever bites, the WorkerManager interface can host an in-process adapter. |
-| R9 | Append-only JSON Lines hits scale limits | Low | Medium | Section 15 defines rotation/archival; storage backend is replaceable via the storage interface. |
-| R10 | Schema drift in `WorkerMessage` / `CompactionArtifactV1` breaks replay | Medium | High | Schemas are versioned (`canonical-v1`, etc.); persisted records include `schemaVersion`; migrations live in `packages/protocol`. |
+| #   | Risk                                                                                | Likelihood | Impact | Mitigation                                                                                                                                                                                     |
+| --- | ----------------------------------------------------------------------------------- | ---------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R1  | `pi-mono` RPC mode evolves incompatibly                                             | Medium     | High   | Pin version; abstract behind a `WorkerRuntime` interface in `core-runtime`; keep one alternative adapter scaffolded.                                                                           |
+| R2  | Compaction plugin (`distill`) is unmaintained or low quality                        | Medium     | Medium | Per-worker fallback is mandatory (Design Rule 12); validate output against `CompactionArtifactV1` before persisting.                                                                           |
+| R3  | Prompt injection from wiki/web bypasses worker judgement                            | High       | High   | Spike: design a provenance-tagging protocol for ingested content and an outer-loop confirmation step for tool calls originating from external text.                                            |
+| R4  | Cancellation does not propagate cleanly into LLM SDK calls                          | Medium     | Medium | Spike: validate `AbortController` propagation through `pi-mono` to the model SDK; document any residual latency.                                                                               |
+| R5  | Sandbox boundary holes on macOS (case-insensitive FS, symlinks, `/private` aliases) | Medium     | High   | Spike: write a focused boundary test suite covering symlink traversal, case-folded paths, and `realpath` aliases before relying on `workspace-boundary`.                                       |
+| R6  | Astro is overkill or under-powered for the wiki UI                                  | Low        | Low    | Decision is reversible; the wiki UI calls a stable wiki service boundary (owned by the wiki PRD and consumed by CLI/skills), so the UI framework can be replaced without core-runtime changes. |
+| R7  | Cloudflare Access misconfiguration exposes the gateway                              | Low        | High   | Infra-as-code in `infra/cloudflare/`; gateway also independently validates `X-Forwarded-Email` and refuses unauthenticated requests.                                                           |
+| R8  | Per-process worker overhead dominates on small machines                             | Low        | Medium | Worker count is small and pi-mono startup is short in practice; if it ever bites, the WorkerManager interface can host an in-process adapter.                                                  |
+| R9  | Append-only JSON Lines hits scale limits                                            | Low        | Medium | Section 15 defines rotation/archival; storage backend is replaceable via the storage interface.                                                                                                |
+| R10 | Schema drift in `WorkerMessage` / `CompactionArtifactV1` breaks replay              | Medium     | High   | Schemas are versioned (`canonical-v1`, etc.); persisted records include `schemaVersion`; migrations live in `packages/protocol`.                                                               |
 
 **Spikes called out above (R3, R4, R5)** are implementation-strategy concerns — they belong in `docs/specs/implementation-strategy.md`, not here. They are listed only so the architecture explicitly acknowledges where its assumptions need empirical confirmation.
 

@@ -28,15 +28,17 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 ## Procedure
 
 1. Determine next epic id:
-  - Inspect `docs/kanban/epics/{unplanned,planned,doing,done}/` for highest `E##`.
-   - Use next numeric id, zero-padded to 2 digits.
+
+- Inspect `docs/kanban/epics/{unplanned,planned,doing,done}/` for highest `E##`.
+- Use next numeric id, zero-padded to 2 digits.
+
 2. Create slug from epic title (lowercase, hyphen-separated).
 3. Create file: `docs/kanban/epics/unplanned/E##-<slug>.md`.
-4. Populate from template: [../_templates/epic.md](../_templates/epic.md).
+4. Populate from template: [../\_templates/epic.md](../_templates/epic.md).
 5. Fill required sections with concrete project context.
 6. Optionally add planned story placeholders using `S##-##` id pattern.
 
-  Note: Do not create story files during epic creation.
+Note: Do not create story files during epic creation.
 
 ## Quality gate
 

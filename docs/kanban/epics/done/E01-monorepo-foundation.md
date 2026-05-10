@@ -35,11 +35,11 @@ _Stories 4 and 5 can proceed in parallel after story 3 is complete._
 
 ## Epic Completion Criteria
 
-- [ ] All listed stories are in `docs/kanban/stories/done/`.
-- [ ] Repository structure matches the architecture-defined monorepo layout, with current code migrated to the correct app/package locations.
-- [ ] Runtime behavior matches architecture and acceptance criteria.
-- [ ] Docs/specs updated where required.
-- [ ] No open blocking issues remain.
+- [x] All listed stories are in `docs/kanban/stories/done/`.
+- [x] Repository structure matches the architecture-defined monorepo layout, with current code migrated to the correct app/package locations.
+- [x] Runtime behavior matches architecture and acceptance criteria.
+- [x] Docs/specs updated where required.
+- [x] No open blocking issues remain.
 
 ## Risks
 

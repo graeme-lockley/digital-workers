@@ -33,9 +33,11 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
    - Find next sequence number for that epic across all story folders.
 3. Create slug from story title.
 4. Create story file path:
-  - default: `docs/kanban/stories/unplanned/S##-##-<slug>.md`
-  - optional: `docs/kanban/stories/<phase>/S##-##-<slug>.md`
-5. For unplanned stories, populate from [../_templates/story-unplanned.md](../_templates/story-unplanned.md).
+
+- default: `docs/kanban/stories/unplanned/S##-##-<slug>.md`
+- optional: `docs/kanban/stories/<phase>/S##-##-<slug>.md`
+
+5. For unplanned stories, populate from [../\_templates/story-unplanned.md](../_templates/story-unplanned.md).
 6. Fill all sections with concrete content.
 7. Update epic `## Stories (ordered - implement sequentially)` with link to this story.
 

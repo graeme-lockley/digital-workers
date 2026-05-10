@@ -1,7 +1,9 @@
 # Root Toolchain and Quality Conventions
 
 ## Sequence: S01-03
+
 ## Tier: Foundation
+
 ## Former ID: (none)
 
 ## Epic

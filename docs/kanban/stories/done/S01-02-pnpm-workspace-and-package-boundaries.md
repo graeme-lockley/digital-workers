@@ -1,7 +1,9 @@
 # pnpm Workspace and Package Boundaries
 
 ## Sequence: S01-02
+
 ## Tier: Foundation
+
 ## Former ID: (none)
 
 ## Epic

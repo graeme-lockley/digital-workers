@@ -27,8 +27,10 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 ## Procedure
 
 1. Locate story:
-  - preferred source: `docs/kanban/stories/planned/`
-  - if already in `stories/doing/`, continue work in-place.
+
+- preferred source: `docs/kanban/stories/planned/`
+- if already in `stories/doing/`, continue work in-place.
+
 2. If source is `stories/planned/`, move to `docs/kanban/stories/doing/`.
 3. Ensure `## Build notes` exists; append entry using `YYYY-MM-DD` date format.
 4. Implement code and documentation changes needed by acceptance criteria.

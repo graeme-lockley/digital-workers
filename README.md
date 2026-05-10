@@ -50,6 +50,7 @@ pnpm install
 ```
 
 > `pnpm install` also downloads puppeteer's bundled Chromium (~300 MB). If you already have Chrome/Chromium installed you can skip that:
+>
 > ```bash
 > export PUPPETEER_EXECUTABLE_PATH=/path/to/chrome
 > pnpm install

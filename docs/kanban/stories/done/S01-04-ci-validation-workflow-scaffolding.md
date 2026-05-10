@@ -1,7 +1,9 @@
 # CI Validation Workflow Scaffolding
 
 ## Sequence: S01-04
+
 ## Tier: Foundation
+
 ## Former ID: (none)
 
 ## Epic

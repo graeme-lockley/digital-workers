@@ -7,7 +7,7 @@
 
 ## Purpose
 
-The architecture document defines *what* digital-workers is. This document defines *how* and *in what order* it will be built. Architecture is the destination; this document is the route. Changing the route does not change the destination.
+The architecture document defines _what_ digital-workers is. This document defines _how_ and _in what order_ it will be built. Architecture is the destination; this document is the route. Changing the route does not change the destination.
 
 This document covers the full implementation: epic sequence, release train, exit criteria per epic, the spec set required to build the solution, the testing and risk strategy, and the spec-maintenance discipline that every story must follow.
 
@@ -116,13 +116,13 @@ Each epic below is a delivery unit. Every epic lists: scope, primary specs touch
 
 ## 3. Release Train
 
-| Train | Epics | Theme | Externally Visible Result |
-|-------|-------|-------|---------------------------|
-| A — Foundations | E01, E02, E03 | Build, contracts, configuration | Repo is buildable; contracts and config are real. |
-| B — Isolation primitives | E04, E05, E06 | Security, storage, sandbox | All non-runtime primitives proven in isolation. |
-| C — Executable runtime | E07, E08 | Workers and the runtime they live in | Headless runtime + worker can serve a programmatic client. |
-| D — First user surface | E09, E10 | Operability and TUI | A human can use the system locally. |
-| E — Remote and knowledge | E11, E12 | Mobile gateway and wiki | Remote use and shared knowledge are live. |
+| Train                    | Epics         | Theme                                | Externally Visible Result                                  |
+| ------------------------ | ------------- | ------------------------------------ | ---------------------------------------------------------- |
+| A — Foundations          | E01, E02, E03 | Build, contracts, configuration      | Repo is buildable; contracts and config are real.          |
+| B — Isolation primitives | E04, E05, E06 | Security, storage, sandbox           | All non-runtime primitives proven in isolation.            |
+| C — Executable runtime   | E07, E08      | Workers and the runtime they live in | Headless runtime + worker can serve a programmatic client. |
+| D — First user surface   | E09, E10      | Operability and TUI                  | A human can use the system locally.                        |
+| E — Remote and knowledge | E11, E12      | Mobile gateway and wiki              | Remote use and shared knowledge are live.                  |
 
 Trains are sequential. Within a train, epics may overlap if their specs are stable.
 
@@ -130,18 +130,18 @@ Trains are sequential. Within a train, epics may overlap if their specs are stab
 
 ## 4. Cross-Cutting Risk Schedule
 
-| Risk (architecture §16) | First epic that must address it | How |
-|-------------------------|----------------------------------|-----|
-| R1 `pi-mono` RPC drift | E07 | Pin version; abstract behind `WorkerRuntime` interface; one alternative adapter scaffolded. |
-| R2 Compaction plugin quality | E07 | Mandatory crude fallback implemented and tested before plugin path. |
-| R3 Prompt injection | E08 (spike), E12 (enforced for wiki ingest) | Provenance-tagging protocol designed in E08; enforced in worker tool dispatch. |
-| R4 Cancellation propagation | E07 | Measured `AbortController` propagation through pi-mono; latency documented. |
-| R5 macOS sandbox boundary holes | E04 | Boundary test suite is the exit gate of E04. |
-| R6 Astro fit for wiki UI | E12 | Decision is reversible; wiki service boundary is the contract. |
-| R7 Cloudflare misconfig | E11 | Infra-as-code + independent gateway header validation. |
-| R8 Per-process worker overhead | E07 | Measured at exit gate; in-process adapter remains an option. |
-| R9 JSONL scale | E05 | Rotation/archival is part of E05 exit criteria. |
-| R10 Schema drift | E02 | `schemaVersion` in every persisted record from day one. |
+| Risk (architecture §16)         | First epic that must address it             | How                                                                                         |
+| ------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| R1 `pi-mono` RPC drift          | E07                                         | Pin version; abstract behind `WorkerRuntime` interface; one alternative adapter scaffolded. |
+| R2 Compaction plugin quality    | E07                                         | Mandatory crude fallback implemented and tested before plugin path.                         |
+| R3 Prompt injection             | E08 (spike), E12 (enforced for wiki ingest) | Provenance-tagging protocol designed in E08; enforced in worker tool dispatch.              |
+| R4 Cancellation propagation     | E07                                         | Measured `AbortController` propagation through pi-mono; latency documented.                 |
+| R5 macOS sandbox boundary holes | E04                                         | Boundary test suite is the exit gate of E04.                                                |
+| R6 Astro fit for wiki UI        | E12                                         | Decision is reversible; wiki service boundary is the contract.                              |
+| R7 Cloudflare misconfig         | E11                                         | Infra-as-code + independent gateway header validation.                                      |
+| R8 Per-process worker overhead  | E07                                         | Measured at exit gate; in-process adapter remains an option.                                |
+| R9 JSONL scale                  | E05                                         | Rotation/archival is part of E05 exit criteria.                                             |
+| R10 Schema drift                | E02                                         | `schemaVersion` in every persisted record from day one.                                     |
 
 ---
 
@@ -160,26 +160,27 @@ A story is not `done` until: tests for changed behaviour exist (or the story rec
 
 ## 6. Spec Ownership Matrix
 
-The architecture is the source of truth for *intent*. Specs are the source of truth for *the buildable design of each facet*. Stories implement specs; every story keeps its specs current.
+The architecture is the source of truth for _intent_. Specs are the source of truth for _the buildable design of each facet_. Stories implement specs; every story keeps its specs current.
 
-| Spec | Owner area | Primary epics that mature it |
-|------|-----------|------------------------------|
-| [00-overview.md](./00-overview.md) | Architecture liaison | E01 |
-| [01-protocol.md](./01-protocol.md) | Protocol | E02, E08 |
-| [02-core-runtime.md](./02-core-runtime.md) | Runtime | E08 |
-| [03-config.md](./03-config.md) | Config | E03 |
-| [04-sandbox.md](./04-sandbox.md) | Sandbox | E06 |
-| [05-security.md](./05-security.md) | Security | E04, E11 |
-| [06-storage.md](./06-storage.md) | Storage | E05, E08 |
-| [07-observability.md](./07-observability.md) | Observability | E09 |
-| [08-worker-runtime.md](./08-worker-runtime.md) | Worker runtime | E07 |
-| [09-tui.md](./09-tui.md) | TUI app | E10 |
-| [10-mobile-gateway.md](./10-mobile-gateway.md) | Gateway | E11 |
-| [11-agent-wiki.md](./11-agent-wiki.md) | Wiki | E12 |
-| [12-packaging-release.md](./12-packaging-release.md) | Release engineering | E01, E11 |
-| [13-testing.md](./13-testing.md) | QA / engineering | All |
-| [adr/README.md](./adr/README.md) | Architecture | All |
-| [runbooks/README.md](./runbooks/README.md) | Operations | E08, E10, E11 |
+| Spec                                                       | Owner area           | Primary epics that mature it |
+| ---------------------------------------------------------- | -------------------- | ---------------------------- |
+| [00-overview.md](./00-overview.md)                         | Architecture liaison | E01                          |
+| [01-protocol.md](./01-protocol.md)                         | Protocol             | E02, E08                     |
+| [02-core-runtime.md](./02-core-runtime.md)                 | Runtime              | E08                          |
+| [03-config.md](./03-config.md)                             | Config               | E03                          |
+| [04-sandbox.md](./04-sandbox.md)                           | Sandbox              | E06                          |
+| [05-security.md](./05-security.md)                         | Security             | E04, E11                     |
+| [06-storage.md](./06-storage.md)                           | Storage              | E05, E08                     |
+| [07-observability.md](./07-observability.md)               | Observability        | E09                          |
+| [08-worker-runtime.md](./08-worker-runtime.md)             | Worker runtime       | E07                          |
+| [09-tui.md](./09-tui.md)                                   | TUI app              | E10                          |
+| [10-mobile-gateway.md](./10-mobile-gateway.md)             | Gateway              | E11                          |
+| [11-agent-wiki.md](./11-agent-wiki.md)                     | Wiki                 | E12                          |
+| [12-packaging-release.md](./12-packaging-release.md)       | Release engineering  | E01, E11                     |
+| [13-testing.md](./13-testing.md)                           | QA / engineering     | All                          |
+| [implementation-strategy.md](./implementation-strategy.md) | Architecture liaison | All                          |
+| [adr/README.md](./adr/README.md)                           | Architecture         | All                          |
+| [runbooks/README.md](./runbooks/README.md)                 | Operations           | E08, E10, E11                |
 
 The spec index lives at [docs/specs/README.md](./README.md).
 
