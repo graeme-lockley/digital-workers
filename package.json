@@ -4,8 +4,9 @@
   "description": "A simple AI assistant built with pi-mono libraries and web browsing support",
   "type": "module",
   "scripts": {
-    "start": "tsx src/index.ts",
-    "dev": "tsx watch src/index.ts",
+    "start": "tsx apps/digital-workers-tui/src/index.ts",
+    "dev": "tsx watch apps/digital-workers-tui/src/index.ts",
+    "test:all": "bash scripts/test-all.sh",
     "check:story": "bash scripts/check-story.sh",
     "check:epic": "bash scripts/check-epic.sh",
     "check:specs": "bash scripts/check-specs.sh",
@@ -16,11 +17,12 @@
     "validate:kanban:all": "bash scripts/validate-kanban-all.sh"
   },
   "dependencies": {
-    "@mariozechner/pi-coding-agent": "*",
+    "@earendil-works/pi-coding-agent": "^0.74.0",
     "pi-web-fetch": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@types/picomatch": "^4.0.3",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
   }

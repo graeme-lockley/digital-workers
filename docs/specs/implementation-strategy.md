@@ -30,9 +30,9 @@ Each epic below is a delivery unit. Every epic lists: scope, primary specs touch
 
 ### E01 — Monorepo Foundation
 
-- **Scope:** pnpm workspaces, Turbo orchestration, root `tsconfig`, ESLint, Prettier, conventional-commit hook (already present), CI workflow scaffolding under `.github/workflows/`, and migration of the current codebase into the architecture-defined monorepo layout (`apps/`, `packages/`, `infra/`, `workspaces/`) with starter code moved to its target app path.
+- **Scope:** pnpm workspaces, Turbo orchestration, root `tsconfig`, ESLint, Prettier, conventional-commit hook (already present), CI workflow scaffolding under `.github/workflows/`, and migration of the current codebase into the architecture-defined monorepo layout (`apps/`, `packages/`, `infra/`, `workspaces/`) with starter code moved from `src/index.ts` to `apps/digital-workers-tui/src/index.ts`.
 - **Specs:** [00-overview.md](./00-overview.md), [12-packaging-release.md](./12-packaging-release.md).
-- **Exit criteria:** Architecture-aligned folder structure exists in-repo with current starter code migrated to target location, `pnpm install && pnpm typecheck && pnpm lint && pnpm test` succeed on the migrated baseline, CI runs on PR, and release pipeline placeholder runs in dry-run.
+- **Exit criteria:** Architecture-aligned folder structure exists in-repo with current starter code migrated to `apps/digital-workers-tui/src/index.ts`, `pnpm install && pnpm typecheck && pnpm lint && pnpm test` succeed on the migrated baseline, CI runs on PR, and release pipeline placeholder runs in dry-run.
 - **Releasable outcome:** Reproducible build/test environment on an architecture-conformant repository layout.
 
 ### E02 — Protocol Package
@@ -217,3 +217,7 @@ These items remain in `architecture.md` §17 as future extensibility and are int
 - Changes to the **epic sequence** require updating §2 and §3 of this document.
 - Changes to the **spec set** require updating §6 here and `docs/specs/README.md`.
 - Changes to **architecture** (intent, not delivery) belong in `docs/architecture.md` and may invalidate parts of this strategy; in that case both documents are updated in the same change.
+
+## Change log
+
+- 2026-05-10: Clarified E01 migration path from `src/index.ts` to `apps/digital-workers-tui/src/index.ts` and made the path explicit in E01 exit criteria.

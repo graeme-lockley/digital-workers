@@ -14,6 +14,7 @@ Orient contributors to the spec set, the conventions all specs share, and how sp
 - The spec catalogue and how to navigate it.
 - Cross-cutting conventions (status, ownership, change log).
 - The contract between specs and stories.
+- Baseline monorepo layout conventions for the first foundation epic (`apps/`, `packages/`, `infra/`, `workspaces/`) and the initial app entrypoint location under `apps/digital-workers-tui/src/`.
 
 ## Design
 
@@ -25,6 +26,7 @@ Orient contributors to the spec set, the conventions all specs share, and how sp
 
 - Index: [docs/specs/README.md](./README.md).
 - Strategy: [implementation-strategy.md](./implementation-strategy.md).
+- Current app surface: `apps/digital-workers-tui/src/index.ts`.
 
 ## Open questions
 
@@ -32,4 +34,5 @@ Orient contributors to the spec set, the conventions all specs share, and how sp
 
 ## Change log
 
+- 2026-05-10: Documented baseline monorepo layout and initial app path under `apps/digital-workers-tui/src/`.
 - 2026-05-09: Initial stub.

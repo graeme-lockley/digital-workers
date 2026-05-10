@@ -2,13 +2,13 @@
 
 Local-first agent runtime project in transition from a single-app prototype to the architecture defined in `docs/architecture.md`.
 
-The current code still runs as a single Node app (`src/index.ts`), while kanban and agent workflow infrastructure has been aligned to the architecture.
+The current code runs as an app entrypoint under `apps/digital-workers-tui/src/index.ts`, while kanban and agent workflow infrastructure is aligned to the architecture.
 
 ## Where we are now
 
 Implemented now:
 
-- Interactive terminal assistant built on pi-mono (`src/index.ts`)
+- Interactive terminal assistant built on pi-mono (`apps/digital-workers-tui/src/index.ts`)
 - Web browsing via `pi-web-fetch`
 - Architecture-aligned kanban layout in `docs/kanban/`
 - Agent workflow skills in `.github/skills/`
@@ -22,7 +22,7 @@ Planned next (from architecture):
 
 ## Runtime features (current app)
 
-- **Full interactive TUI** — powered by `@mariozechner/pi-coding-agent`'s `InteractiveMode`
+- **Full interactive TUI** — powered by `@earendil-works/pi-coding-agent`'s `InteractiveMode`
 - **Web browsing** — the LLM can fetch and read any web page via the `web_fetch` tool (headless Chrome + trafilatura extraction)
 - **Session persistence** — conversations are saved and resumable
 - **All standard pi commands** — `/model`, `/settings`, `/new`, `/resume`, `/tree`, `/fork`, etc.
@@ -201,7 +201,7 @@ pnpm lint:commit-msg -- "feat(core): add session manager skeleton"
 ## How it works
 
 ```
-src/index.ts
+apps/digital-workers-tui/src/index.ts
   └─ createAgentSessionRuntime()        # pi-mono runtime factory
        └─ createAgentSessionServices()  # loads settings, auth, models
             └─ resourceLoaderOptions
@@ -214,7 +214,7 @@ The `web_fetch` tool is registered as a pi extension so the LLM can call it auto
 
 ## Customising the assistant
 
-Edit `src/index.ts` to:
+Edit `apps/digital-workers-tui/src/index.ts` to:
 
 - **Change the system prompt** — modify the `appendSystemPrompt` array in `createAgentSessionServices`
 - **Add more tools** — pass additional `extensionFactories` or `additionalExtensionPaths`
@@ -239,8 +239,13 @@ digital-workers/
 │   ├── check-epic.sh
 │   ├── lint-skills.sh
 │   └── validate-kanban-all.sh
-├── src/
-│   └── index.ts       # current runnable app entry point
+├── apps/
+│   └── digital-workers-tui/
+│       └── src/
+│           └── index.ts
+├── packages/
+├── infra/
+├── workspaces/
 ├── AGENT.md
 ├── package.json
 ├── tsconfig.json

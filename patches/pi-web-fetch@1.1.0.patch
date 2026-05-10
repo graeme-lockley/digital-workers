@@ -1,0 +1,99 @@
+diff --git a/index.ts b/index.ts
+index 35bae3bc09d3cc4cd7179ea8c2180b6ca857e163..03ed2d47133e27fe04db7ca163da6bbed396d7cc 100644
+--- a/index.ts
++++ b/index.ts
+@@ -3,9 +3,9 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
+ import { join, dirname } from "node:path";
+ import { homedir } from "node:os";
+ import { fileURLToPath } from "node:url";
+-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+-import { truncateHead, DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, formatSize, getMarkdownTheme } from "@mariozechner/pi-coding-agent";
+-import { Text, Markdown, Container } from "@mariozechner/pi-tui";
++import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
++import { truncateHead, DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, formatSize, getMarkdownTheme } from "@earendil-works/pi-coding-agent";
++import { Text, Markdown, Container } from "@earendil-works/pi-tui";
+ import { Type } from "@sinclair/typebox";
+ import { BrowserPool } from "./browser-pool.js";
+ 
+@@ -859,7 +859,7 @@ export default function (pi: ExtensionAPI) {
+ 				return renderBatchStatus(batchDetails.pages, theme);
+ 			}
+ 
+-			const isError = result.isError;
++			const isError = (result as any).isError ?? false;
+ 			const textContent = result.content[0];
+ 			const text = textContent?.type === "text" ? textContent.text : "(no output)";
+ 
+@@ -903,6 +903,12 @@ export default function (pi: ExtensionAPI) {
+ 			};
+ 		}
+ 		const url = urlResult.url;
++		if (!url) {
++			return {
++				content: [{ type: "text", text: "Invalid URL" }],
++				isError: true,
++			};
++		}
+ 
+ 		// Find matching extension (if any)
+ 		const matchedExtension = registry.match(url);
+@@ -911,7 +917,7 @@ export default function (pi: ExtensionAPI) {
+ 		// 2. Check cache (before hooks, since beforeFetch may short-circuit)
+ 		const cached = getCached(url);
+ 		if (cached) {
+-			onUpdate?.({ content: [{ type: "text", text: "Cache hit — processing..." }] });
++			onUpdate?.({ content: [{ type: "text", text: "Cache hit — processing..." }], details: {} });
+ 			return await runProcess(cached, url, prompt, model, thinkingLevel, matchedExtension, hookCtx, signal, onUpdate);
+ 		}
+ 
+@@ -1053,7 +1059,7 @@ export default function (pi: ExtensionAPI) {
+ 		signal?: AbortSignal,
+ 		onUpdate?: Parameters<Parameters<typeof pi.registerTool>[0]["execute"]>[3],
+ 	): Promise<{ done: true; result: any } | { done: false; html: string }> {
+-		onUpdate?.({ content: [{ type: "text", text: `Fetching ${url}...` }] });
++		onUpdate?.({ content: [{ type: "text", text: `Fetching ${url}...` }], details: {} });
+ 
+ 		const fetchResult = await fetchPage(url, signal);
+ 		if (!fetchResult.ok) {
+@@ -1094,7 +1100,7 @@ export default function (pi: ExtensionAPI) {
+ 		signal?: AbortSignal,
+ 		onUpdate?: Parameters<Parameters<typeof pi.registerTool>[0]["execute"]>[3],
+ 	): Promise<{ done: true; result: any } | { done: false; markdown: string }> {
+-		onUpdate?.({ content: [{ type: "text", text: "Extracting content..." }] });
++		onUpdate?.({ content: [{ type: "text", text: "Extracting content..." }], details: {} });
+ 
+ 		const extractResult = await withTimeout(extractContent(html, signal), EXTRACT_TIMEOUT_MS, "Content extraction", signal).catch((err): { ok: false; error: string } => ({ ok: false, error: err.message }));
+ 		if (!extractResult.ok) {
+@@ -1135,7 +1141,7 @@ export default function (pi: ExtensionAPI) {
+ 
+ 		// Prompted path — use sub-agent if model available
+ 		if (prompt && model) {
+-			onUpdate?.({ content: [{ type: "text", text: "Processing with LLM..." }] });
++			onUpdate?.({ content: [{ type: "text", text: "Processing with LLM..." }], details: {} });
+ 
+ 			const agentResult = await withTimeout(runSubAgent(markdown, `${prompt}\n\n${CONTENT_GUARDRAILS}`, model, thinkingLevel, signal), SUBAGENT_TIMEOUT_MS, "LLM processing", signal).catch((err): SubAgentError => ({ ok: false, error: err.message }));
+ 			if (agentResult.ok) {
+@@ -1183,7 +1189,7 @@ export default function (pi: ExtensionAPI) {
+ 			return { content: [{ type: "text", text }] };
+ 		}
+ 
+-		onUpdate?.({ content: [{ type: "text", text: "Page content is large — generating summary..." }] });
++		onUpdate?.({ content: [{ type: "text", text: "Page content is large — generating summary..." }], details: {} });
+ 
+ 		const summaryResult = await withTimeout(runSubAgent(markdown, SUMMARIZE_PROMPT, model, thinkingLevel, signal), SUBAGENT_TIMEOUT_MS, "LLM summarization", signal).catch((err): SubAgentError => ({ ok: false, error: err.message }));
+ 		if (summaryResult.ok) {
+diff --git a/package.json b/package.json
+index b827da045d586712bacaf8bb364bf71a39fd608c..1be24e59487daacef1c968818034b5cf1f10129f 100644
+--- a/package.json
++++ b/package.json
+@@ -38,8 +38,8 @@
+     "puppeteer": "^24.0.0"
+   },
+   "peerDependencies": {
+-    "@mariozechner/pi-coding-agent": "*",
+-    "@mariozechner/pi-tui": "*",
++    "@earendil-works/pi-coding-agent": "*",
++    "@earendil-works/pi-tui": "*",
+     "@sinclair/typebox": "*"
+   },
+   "devDependencies": {

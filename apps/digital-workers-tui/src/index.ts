@@ -17,7 +17,7 @@ import {
 	getAgentDir,
 	InteractiveMode,
 	SessionManager,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 import webFetchExtension from "pi-web-fetch";
 
 const cwd = process.cwd();
