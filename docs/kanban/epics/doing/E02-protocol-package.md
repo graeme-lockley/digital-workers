@@ -24,7 +24,7 @@ The implementation strategy requires a stable protocol layer before later epics 
 ## Stories (ordered - implement sequentially)
 
 1. [S02-01-protocol-package-scaffold.md](../../stories/done/S02-01-protocol-package-scaffold.md) - Create the `packages/protocol` workspace package, public entrypoint, and shared versioning conventions used by every schema family.
-2. [S02-02-protocol-message-and-api-contracts.md](../../stories/unplanned/S02-02-protocol-message-and-api-contracts.md) - Define the event, worker message, worker command, API request/response, and workspace configuration schemas.
+2. [S02-02-protocol-message-and-api-contracts.md](../../stories/done/S02-02-protocol-message-and-api-contracts.md) - Define the event, worker message, worker command, API request/response, and workspace configuration schemas.
 3. [S02-03-protocol-state-and-compatibility-tests.md](../../stories/unplanned/S02-03-protocol-state-and-compatibility-tests.md) - Define persisted record, outcome, and compaction schemas plus the canonical-v1 compatibility tests.
 
 _Stories 2 and 3 can be implemented in parallel after story 1 is complete._

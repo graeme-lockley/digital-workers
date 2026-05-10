@@ -23,11 +23,16 @@ Define how workspace configuration is loaded, validated, and surfaced to the res
 - Errors include path, location in YAML, and actionable remediation.
 - No environment-variable interpolation beyond `apiEnvName` indirection (architecture Threat T6).
 - Config is read once at startup; live reload is out of scope for the initial release.
+- The canonical validator input/output is `WorkspaceConfigSchema` from `@digital-workers/protocol`, including:
+  - required `schemaVersion: canonical-v1`, `workspaceId`, and `workspaceRoot`,
+  - `workers` as a non-empty array of `WorkerConfigSchema` entries,
+  - optional `defaults` with a positive integer `maxConcurrentWorkers`.
 
 ## Interfaces
 
 - `loadWorkspaceConfig(path: string): Promise<WorkspaceConfiguration>` in `packages/config/src/loader.ts`.
 - `validateWorkspaceConfig(raw: unknown): WorkspaceConfiguration` in `packages/config/src/validator.ts`.
+- Protocol contract source: `packages/protocol/src/workspace-config.ts` exported from `@digital-workers/protocol`.
 
 ## Open questions
 
@@ -35,4 +40,5 @@ Define how workspace configuration is loaded, validated, and surfaced to the res
 
 ## Change log
 
+- 2026-05-10: S02-02 aligned config validation expectations to the concrete `WorkspaceConfigSchema` and `WorkerConfigSchema` contracts in `packages/protocol`.
 - 2026-05-09: Initial stub.

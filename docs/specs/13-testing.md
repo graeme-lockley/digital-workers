@@ -31,6 +31,7 @@ Define the testing strategy that governs every story.
 - The release workflow scaffold is validated locally by `pnpm check:release-workflow`, which asserts the workflow is triggerable via `workflow_dispatch`, includes the repository validation stages, and contains no publish commands.
 - `pnpm format` remains available as a root quality command, but it is not part of the required green baseline for foundation CI until the repository's inherited formatting drift is cleaned up.
 - Protocol scaffold changes (S02-01) must include: a package-barrel smoke test in `packages/protocol`, a canonical version primitive unit assertion, and at least one cross-workspace import validation from a consumer package/app.
+- Protocol message/API/config contract changes (S02-02) must include schema validation tests for representative valid and invalid payloads across transport (`Event`, `WorkerMessage`, `WorkerCommand`), API request/response contracts, and `WorkspaceConfigSchema`.
 
 ## Interfaces
 
@@ -46,6 +47,7 @@ Define the testing strategy that governs every story.
 
 ## Change log
 
+- 2026-05-10: Added S02-02 protocol contract test expectations for transport, API, and workspace-config schema validation.
 - 2026-05-10: Added S02-01 protocol scaffold testing expectations (barrel smoke test, canonical version assertion, and cross-workspace import validation).
 - 2026-05-10: Clarified that the CI-required local reproduction path is the current green baseline and that `pnpm format` remains non-gating until repository formatting drift is resolved (S01-04).
 - 2026-05-10: Added the local release-workflow validation check for the dry-run release scaffold (S01-05).
