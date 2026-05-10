@@ -52,12 +52,27 @@ importers:
 
   apps/digital-workers-tui:
     dependencies:
+      "@digital-workers/protocol":
+        specifier: workspace:*
+        version: link:../../packages/protocol
       "@earendil-works/pi-coding-agent":
         specifier: ^0.74.0
         version: 0.74.0(ws@8.20.0)(zod@4.4.3)
       pi-web-fetch:
         specifier: ^1.1.0
         version: 1.1.0(patch_hash=acd79391c0620574b3c55da233037c2979fa82425f0d22409495db7922cef73f)(@mariozechner/pi-coding-agent@0.73.1(ws@8.20.0)(zod@4.4.3))(@mariozechner/pi-tui@0.73.1)(@sinclair/typebox@0.34.49)(typescript@5.9.3)
+    devDependencies:
+      "@types/node":
+        specifier: ^22.0.0
+        version: 22.19.18
+      tsx:
+        specifier: ^4.19.0
+        version: 4.21.0
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
+
+  packages/protocol:
     devDependencies:
       "@types/node":
         specifier: ^22.0.0

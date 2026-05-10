@@ -39,6 +39,8 @@ This spec is the design source for `packages/protocol`, the workspace package th
 
 - Source: `packages/protocol/src/`.
 - Public entrypoint: `packages/protocol/src/index.ts`.
+- Package name: `@digital-workers/protocol`.
+- Canonical version primitive: `CANONICAL_PROTOCOL_VERSION` (currently `canonical-v1`) exported from the public entrypoint.
 - Contract test helpers: `packages/test-utils/src/contract-helpers.ts`.
 - Downstream consumers: core runtime, storage, config, worker runtime, TUI, and wiki-related stories as they mature.
 
@@ -50,5 +52,6 @@ This spec is the design source for `packages/protocol`, the workspace package th
 
 ## Change log
 
+- 2026-05-10: S02-01 scaffolded `packages/protocol` with package metadata, a stable public barrel, and the initial canonical version export for downstream imports.
 - 2026-05-10: Expanded the protocol spec to match the E02 package/stories plan and the canonical-v1 export boundary.
 - 2026-05-09: Initial stub.

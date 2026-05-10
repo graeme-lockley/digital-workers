@@ -12,6 +12,7 @@
     "test": "node --test"
   },
   "dependencies": {
+    "@digital-workers/protocol": "workspace:*",
     "@earendil-works/pi-coding-agent": "^0.74.0",
     "pi-web-fetch": "^1.1.0"
   },
