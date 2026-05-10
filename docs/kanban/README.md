@@ -68,6 +68,10 @@ Every story keeps the spec set current. The full discipline is defined in
 and enforced by `plan-epic`, `plan-story`, `build-story`, `verify-story`, `finish-story`, `finish-epic`,
 and the validators `pnpm check:story`, `pnpm check:epic`, and `pnpm check:specs`.
 
+### Spec-aware epic decomposition
+
+When an epic is decomposed during `plan-epic`, the new unplanned stories may already include a `## Documentation and specs to update` section sketched from the epic's scope and the relevant spec files. This section is optional in unplanned stories and helps the planner see what design work is ahead. When `plan-story` runs, it will validate and refine these spec references as part of the planning step, ensuring accuracy before work begins.
+
 ## Canonical Root Commands
 
 - `pnpm typecheck` runs the shared TypeScript validation workflow from repository root.

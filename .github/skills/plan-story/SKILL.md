@@ -28,11 +28,11 @@ Canonical rules: [docs/kanban/README.md](docs/kanban/README.md)
 1. Locate source file in `docs/kanban/stories/unplanned/`.
 2. Ensure unplanned sections are present and filled.
 3. Append missing planned sections from [../\_templates/story-planned-additions.md](../_templates/story-planned-additions.md).
-4. Populate:
+4. Populate planned sections (or refine if already present from epic planning):
    - `Impact analysis`
    - `Tasks` with actionable checkbox items
    - `Tests to add`
-   - `Documentation and specs to update` — enumerate every `docs/specs/*` file the story will change (one bullet per spec). If no spec is impacted, write `_No spec impact_` followed by a one-line justification.
+   - `Documentation and specs to update` — enumerate every `docs/specs/*` file the story will change (one bullet per spec). If no spec is impacted, write `_No spec impact_` followed by a one-line justification. If an unplanned epic has already sketched this section, validate and refine the list to ensure accuracy.
 5. Move file to `docs/kanban/stories/planned/` with same filename.
 6. Open the linked epic (any phase under `docs/kanban/epics/`) and update the story entry in its `Stories` section to point at `../../stories/planned/<story>.md`.
 
