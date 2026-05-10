@@ -8,7 +8,7 @@
 
 ## Epic
 
-- Epic: [E02 Protocol Package](../../epics/unplanned/E02-protocol-package.md)
+- Epic: [E02 Protocol Package](../../epics/doing/E02-protocol-package.md)
 
 ## Summary
 
@@ -29,9 +29,25 @@ Depends on S02-01 for the shared package scaffold. Can run in parallel with S02-
 - Add contract tests that verify the exported `canonical-v1` family remains backward compatible.
 - Ensure the persisted schemas all carry the versioning convention required by the protocol spec.
 
+## Impact analysis
+
+This story extends the protocol package from transport, API, and workspace config into persisted state and compatibility coverage. The result should be a stable canonical-v1 contract surface for storage and runtime consumers, with tests that fail if those exported shapes drift incompatibly.
+
+## Tasks
+
+- [x] Add the persisted record schemas and export them from `packages/protocol/src/index.ts`.
+- [x] Add the outcome, compaction, session-config, and worker-status snapshot schemas with the canonical-v1 version field.
+- [x] Group the new schemas behind a clear public barrel so downstream code can import them without reaching into internal files.
+- [x] Add compatibility checks that exercise the canonical-v1 export family and reject incompatible shape changes.
+
+## Tests to add
+
+- [x] Extend `packages/protocol/src/index.test.ts` with representative valid and invalid payloads for the new persisted and outcome schemas.
+- [x] Add a contract-style test that enumerates the canonical-v1 exports and fails if a required schema is missing or renamed incompatibly.
+
 ## Documentation and specs to update
 
-- [docs/specs/01-protocol.md](../../../specs/01-protocol.md) to capture the persisted state, outcome, and compatibility-test contracts exported by the protocol package.
+- [x] `docs/specs/01-protocol.md` — document the persisted state, outcome, compaction, session-config, and worker-status contracts plus the compatibility-test expectations.
 
 ## Acceptance Criteria
 
@@ -49,3 +65,11 @@ Depends on S02-01 for the shared package scaffold. Can run in parallel with S02-
 
 - Compatibility tests should stay focused on the exported canonical family instead of encoding implementation details.
 - `Session` and `SessionConfig` should be handled carefully so the contract stays aligned with the runtime and storage specs.
+
+## Build notes
+
+- 2026-05-10: Added the durable protocol state module, exported the canonical-v1 state family from `packages/protocol/src/index.ts`, and extended the protocol test suite with compatibility and representative payload coverage.
+
+## Spec Updates
+
+- `docs/specs/01-protocol.md` - documented the durable state module, canonical-v1 state bundle, and the compatibility-test expectations for persisted and runtime-shared state contracts.

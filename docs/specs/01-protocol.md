@@ -17,9 +17,7 @@ This spec is the design source for `packages/protocol`, the workspace package th
 - Worker messages (`WorkerMessage`) and commands (`WorkerCommand`).
 - API request/response types for `SessionAPI`, `WorkerManagerAPI`, `RouterAPI`, `RuntimeConfigAPI`.
 - Workspace configuration schema (`WorkspaceConfigSchema`).
-- Persisted records: `TranscriptEntry`, `AuditEntry`, `MemoryEntry`, `TaskRecord`, `OuterContext`, `Session`.
-- Outcome and compaction artefacts: `InnerLoopOutcome`, `CompactionArtifactV1`.
-- Snapshot-style runtime status and config types that are shared across runtime and durable stores, including `WorkerStatusSnapshot` and `SessionConfig`.
+- Durable state and runtime-shared snapshots: `TranscriptEntry`, `AuditEntry`, `MemoryEntry`, `TaskRecord`, `OuterContext`, `Session`, `InnerLoopOutcome`, `CompactionArtifactV1`, `SessionConfig`, `WorkerStatusSnapshot`.
 
 ## Design
 
@@ -33,11 +31,11 @@ This spec is the design source for `packages/protocol`, the workspace package th
   - transport and messaging contracts (`Event`, `WorkerMessage`, `WorkerCommand`),
   - API contracts (`SessionAPI`, `WorkerManagerAPI`, `RouterAPI`, `RuntimeConfigAPI`),
   - workspace configuration (`WorkspaceConfigSchema`),
-  - persisted state (`TranscriptEntry`, `AuditEntry`, `MemoryEntry`, `TaskRecord`, `OuterContext`, `Session`),
-  - outcomes and compaction (`InnerLoopOutcome`, `CompactionArtifactV1`, `SessionConfig`, `WorkerStatusSnapshot`).
+  - durable state and snapshots (`TranscriptEntry`, `AuditEntry`, `MemoryEntry`, `TaskRecord`, `OuterContext`, `Session`, `InnerLoopOutcome`, `CompactionArtifactV1`, `SessionConfig`, `WorkerStatusSnapshot`).
 - Every persisted record carries a `schemaVersion` field (Risk R10).
 - Backward compatibility is contract-tested; breaking changes increment the canonical version (`canonical-v1` → `canonical-v2`) and ship migrations.
 - The package preserves a stable public export surface so later epics can import contracts without duplicating shapes.
+- S02-03 adds `packages/protocol/src/state.ts` as the concrete home for the durable-state family and exports a `CanonicalV1StateSchemas` bundle so compatibility tests can detect renamed or missing contracts.
 
 ## Interfaces
 
@@ -50,6 +48,7 @@ This spec is the design source for `packages/protocol`, the workspace package th
 - Workspace config contract: `WorkspaceConfigSchema` requires `schemaVersion`, workspace identity/root, and at least one worker entry; worker entries are validated by `WorkerConfigSchema`.
 - Contract test helpers: `packages/test-utils/src/contract-helpers.ts`.
 - Downstream consumers: core runtime, storage, config, worker runtime, TUI, and wiki-related stories as they mature.
+- Durable-state contracts: `TranscriptEntry`, `AuditEntry`, `MemoryEntry`, `TaskRecord`, `OuterContext`, `Session`, `InnerLoopOutcome`, `CompactionArtifactV1`, `SessionConfig`, and `WorkerStatusSnapshot` all require `schemaVersion: canonical-v1` and strict object parsing; compatibility tests enumerate the exported canonical-v1 state family.
 
 ## Open questions
 
@@ -59,6 +58,7 @@ This spec is the design source for `packages/protocol`, the workspace package th
 
 ## Change log
 
+- 2026-05-10: S02-03 added the durable state, outcome, compaction, session-config, and worker-status protocol schemas plus canonical-v1 compatibility coverage.
 - 2026-05-10: S02-02 added concrete transport, API, and workspace config zod schemas plus canonical-v1 request/response discriminator requirements.
 - 2026-05-10: S02-01 scaffolded `packages/protocol` with package metadata, a stable public barrel, and the initial canonical version export for downstream imports.
 - 2026-05-10: Expanded the protocol spec to match the E02 package/stories plan and the canonical-v1 export boundary.

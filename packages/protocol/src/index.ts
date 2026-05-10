@@ -57,3 +57,27 @@ export {
   type WorkerConfig,
   type WorkspaceConfig
 } from "./workspace-config.js";
+
+export {
+  CanonicalV1StateSchemas,
+  TranscriptEntrySchema,
+  AuditEntrySchema,
+  MemoryEntrySchema,
+  TaskRecordSchema,
+  OuterContextSchema,
+  SessionSchema,
+  InnerLoopOutcomeSchema,
+  CompactionArtifactV1Schema,
+  SessionConfigSchema,
+  WorkerStatusSnapshotSchema,
+  type TranscriptEntry,
+  type AuditEntry,
+  type MemoryEntry,
+  type TaskRecord,
+  type OuterContext,
+  type Session,
+  type InnerLoopOutcome,
+  type CompactionArtifactV1,
+  type SessionConfig,
+  type WorkerStatusSnapshot
+} from "./state.js";
