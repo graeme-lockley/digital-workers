@@ -31,11 +31,11 @@ _Stories 2 and 3 can be implemented in parallel after story 1 is complete._
 
 ## Epic Completion Criteria
 
-- [ ] `packages/protocol` exists and exports the canonical contract surface from `src/index.ts`.
-- [ ] All schemas listed in the protocol spec are implemented with versioned shapes.
-- [ ] Backward-compatibility tests cover the `canonical-v1` family.
-- [ ] Downstream specs and stories can import the package without duplicating schema definitions.
-- [ ] No open blocking issues remain.
+- [x] `packages/protocol` exists and exports the canonical contract surface from `src/index.ts`.
+- [x] All schemas listed in the protocol spec are implemented with versioned shapes.
+- [x] Backward-compatibility tests cover the `canonical-v1` family.
+- [x] Downstream specs and stories can import the package without duplicating schema definitions.
+- [x] No open blocking issues remain.
 
 ## Risks
 
