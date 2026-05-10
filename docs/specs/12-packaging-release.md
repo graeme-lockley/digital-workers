@@ -17,7 +17,7 @@ Define how the monorepo is built, tested, versioned, and released, and how infra
 - **Workspace package boundaries:** pnpm-workspace.yaml declares workspace membership via globs: `apps/*`, `packages/*`, `infra`, and `workspaces/*`. Each workspace member must have a `package.json` with a scoped name (e.g., `@digital-workers/tui` for the TUI app).
 - **Dependency resolution:** All workspace members resolve dependencies through the root lockfile (`pnpm-lock.yaml`); shared dependencies are hoisted to `.pnpm/` by default.
 - **Workspace-aware scripts:** Root `package.json` uses pnpm filters (e.g., `pnpm --filter @digital-workers/tui`) to orchestrate per-package commands; utility scripts like `pnpm -w typecheck` run in workspace mode for cross-package runs.
-- CI workflows under `.github/workflow/`: `ci.yml`, `test.yml`, `release.yml`.
+- CI workflows under `.github/workflows/`; foundation starts with `validate.yml` for repository validation, and later stories can add release-oriented workflows.
 - Conventional Commits enforcement (already implemented via `.githooks/commit-msg`).
 - Versioning strategy (per-package semver; coordinated release for runtime + protocol).
 - Docker images for runtime and gateway (`infra/docker/`).
@@ -33,10 +33,13 @@ Define how the monorepo is built, tested, versioned, and released, and how infra
 - Root validation commands are canonical and must remain stable: `pnpm typecheck`, `pnpm lint`, `pnpm format`, and `pnpm test`.
 - Turbo orchestrates cross-workspace `typecheck`, `lint`, and `test` runs from the repository root, while package-local scripts remain the execution units Turbo invokes.
 - The root `package.json` must declare a `packageManager` field so workspace tooling resolves consistently in local development and CI.
+- `.github/workflows/validate.yml` is the source-of-truth validation workflow for foundation work: it installs dependencies with `pnpm install --frozen-lockfile`, then runs the current green baseline checks `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm validate:kanban:all` on pushes to `main` and on pull requests.
+- `pnpm format` remains part of the canonical root command surface, but it is not a CI gate in the foundation workflow until repository-wide formatting drift is cleaned up in a dedicated follow-on change.
+- The validation workflow pins pnpm to the version declared in the root `packageManager` field and uses Node.js 22 so CI and local development select the same toolchain family.
 
 ## Interfaces
 
-- `pnpm-workspace.yaml`, `turbo.json`, `package.json` scripts.
+- `.github/workflows/validate.yml`, `pnpm-workspace.yaml`, `turbo.json`, `package.json` scripts.
 - `tsconfig.base.json`, root `tsconfig.json`, and per-workspace `tsconfig.json` files.
 - `eslint.config.js` and `.prettierrc.json` at repository root.
 - `package.json` start/dev entrypoint path: `apps/digital-workers-tui/src/index.ts`.
@@ -47,6 +50,7 @@ Define how the monorepo is built, tested, versioned, and released, and how infra
 
 ## Change log
 
+- 2026-05-10: Clarified that `validate.yml` enforces the current green baseline (`typecheck`, `lint`, `test`, kanban validators) while `pnpm format` remains a non-gating canonical root command until repository formatting drift is resolved (S01-04).
 - 2026-05-10: Added the root TypeScript base strategy, canonical root validation commands, Turbo orchestration expectations, and the `packageManager` requirement (S01-03).
 - 2026-05-10: Documented pnpm workspace package boundaries, dependency resolution strategy, and workspace-aware script patterns (S01-02).
 - 2026-05-10: Added entrypoint path and top-level scaffold requirements for the S01-01 migration.

@@ -28,7 +28,7 @@ The implementation strategy sequences all delivery behind a shared foundation. W
 1. [S01-01-monorepo-scaffold-and-app-migration.md](../../stories/done/S01-01-monorepo-scaffold-and-app-migration.md) - Create architecture-aligned top-level directories and migrate the starter app into `apps/digital-workers-tui/`.
 2. [S01-02-pnpm-workspace-and-package-boundaries.md](../../stories/done/S01-02-pnpm-workspace-and-package-boundaries.md) - Define pnpm workspace boundaries and package manifests for the migrated app layout.
 3. [S01-03-root-toolchain-and-quality-conventions.md](../../stories/done/S01-03-root-toolchain-and-quality-conventions.md) - Establish root TypeScript, lint, format, test, and task orchestration conventions.
-4. [S01-04-ci-validation-workflow-scaffolding.md](../../stories/planned/S01-04-ci-validation-workflow-scaffolding.md) - Add CI workflow scaffolding for install and quality validation on PR/push.
+4. [S01-04-ci-validation-workflow-scaffolding.md](../../stories/done/S01-04-ci-validation-workflow-scaffolding.md) - Add CI workflow scaffolding for install and quality validation on PR/push.
 5. [S01-05-release-dry-run-placeholder.md](../../stories/unplanned/S01-05-release-dry-run-placeholder.md) - Add a non-publishing release workflow placeholder that runs in dry-run mode.
 
 _Stories 4 and 5 can proceed in parallel after story 3 is complete._
